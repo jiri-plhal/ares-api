@@ -18,10 +18,20 @@ import com.plhal.ares.aresapi.model.StatutarniOrgan;
 @Repository
 public class CompanyDAOImpl implements CompanyDAO {
 
+	// Preffix a Suffix URL adresy ze kterého získám XML dokument s informace z
+	// obchodního rejstříku. Mezi preffixem a suffixem je identifikační číslo firmy
 	private final String urlPreffix = "http://wwwinfo.mfcr.cz/cgi-bin/ares/darv_or.cgi?ico=";
 	private final String urlSuffix = "&xml=0&ver=1.0.2";
 
+	// Instance společnosti, kterou budu zjištovat a naplňovat daty
 	private Firma firma;
+
+	// Proměnná, ze které budu parsovat XML dokument
+	Document doc;
+
+	// Pomocné objekty pro parsování XML dokumentu
+	NodeList tempNodeList;
+	Element tempE;
 
 	public Firma najdiFirmu(String ICO) {
 
@@ -35,39 +45,30 @@ public class CompanyDAOImpl implements CompanyDAO {
 			builder = factory.newDocumentBuilder();
 
 			// Získávám XML dokument z URL adresy ARES-API
-			Document doc = builder.parse(urlPreffix + ICO + urlSuffix);
+			doc = builder.parse(urlPreffix + ICO + urlSuffix);
 
 			// Kontroluji, zda daná firma existuje, pokud ne vracím null
 			if (doc.getElementsByTagName("dtt:Error").getLength() > 0) {
 				return null;
 			}
 
-			// Pomocné objekty pro parsování XML dokumentu
-			NodeList tempNodeList;
-			Element tempE;
-
-			// Volám metodu pro získání základních informací o firmě
-			this.pridejZakladniUdaje(doc);
-
 			// Volám metodu pro získání členů statutárních orgánů
-			this.pridejClenyStatutarnihoOrganu(doc);
+			this.pridejClenyStatutarnihoOrganu();
 
 			// Získávám údaje o základním kapitálu společnosti
-			tempNodeList = doc.getElementsByTagName("dtt:Kapital");
-			System.out.println("*****" + tempNodeList.item(0) + "******");
-			if (tempNodeList.item(0) == null) {
-				firma.setZakladniKapital("Tato společnost nemá základní kapitál");
-			} else {
-				tempE = (Element) tempNodeList.item(0);
+			this.zjistiZakladniKapital();
 
-				// Vhodně formátuji hodnotu o základním kapitálu
-				String vklad = tempE.getElementsByTagName("dtt:Kc").item(0).getTextContent();
-				if (vklad.contains(";")) {
-					vklad = vklad.substring(0, vklad.indexOf(";"));
-				}
-				vklad = vklad.concat(" Kč");
-				firma.setZakladniKapital(vklad);
-			}
+			// Získávám údaje o názvu společnosti
+			this.zjistiNazev();
+
+			// Získávám údaje o sídle společnosti
+			this.zjistiSidlo();
+
+			// Získávám údaje o předmětech podnikání
+			this.pridejPredmetyPodnikani();
+
+			// Získávám údaje o právní formě podnikání
+			this.zjistiPravniFormu();
 
 		} catch (ParserConfigurationException e) {
 
@@ -84,50 +85,7 @@ public class CompanyDAOImpl implements CompanyDAO {
 
 	}
 
-	private void pridejZakladniUdaje(Document doc) {
-
-		// Pomocné objekty pro parsování XML dokumentu
-		NodeList tempNodeList;
-		Element tempE;
-
-		// Získávám název obchodní firmy
-		tempNodeList = doc.getElementsByTagName("dtt:Obchodni_firma");
-		firma.setNazevFirmy(tempNodeList.item(0).getTextContent());
-
-		// Získávám údaje o sídle firmy
-		tempNodeList = doc.getElementsByTagName("dtt:Sidlo");
-		tempE = (Element) tempNodeList.item(0);
-
-		// Získávám adresu sídla firmy a upravuju ji do vhodného formátu
-		String sidlo = "";
-		sidlo = sidlo.concat(tempE.getElementsByTagName("dtt:Nazev_ulice").item(0).getTextContent()).concat(" ");
-		if (tempE.getElementsByTagName("dtt:Cislo_domovni").item(0) == null) {
-			sidlo = sidlo.concat(tempE.getElementsByTagName("dtt:Cislo_do_adresy").item(0).getTextContent());
-		} else {
-			sidlo = sidlo.concat(tempE.getElementsByTagName("dtt:Cislo_domovni").item(0).getTextContent()).concat("/")
-					.concat(tempE.getElementsByTagName("dtt:Cislo_orientacni").item(0).getTextContent());
-		}
-
-		sidlo = sidlo.concat(", ").concat(tempE.getElementsByTagName("dtt:Nazev_obce").item(0).getTextContent())
-				.concat(", ").concat(tempE.getElementsByTagName("dtt:PSC").item(0).getTextContent()).concat(" ")
-				.concat(tempE.getElementsByTagName("dtt:Nazev_obce").item(0).getTextContent());
-		firma.setSidlo(sidlo);
-
-		// Získávám kolekci předmětů podnikání
-		tempNodeList = doc.getElementsByTagName("dtt:Predmet_podnikani");
-		tempE = (Element) tempNodeList.item(0);
-		for (int i = 0; i < tempE.getElementsByTagName("dtt:Text").getLength(); i++) {
-			firma.getPredmetPodnikani().add(tempE.getElementsByTagName("dtt:Text").item(i).getTextContent());
-		}
-
-		// Získáme informace o právní formě společnosti
-		tempNodeList = doc.getElementsByTagName("dtt:Zakladni_udaje");
-		tempE = (Element) tempNodeList.item(0);
-		firma.setPravniForma(tempE.getElementsByTagName("dtt:Nazev_PF").item(0).getTextContent());
-
-	}
-
-	private void pridejClenyStatutarnihoOrganu(Document doc) {
+	private void pridejClenyStatutarnihoOrganu() {
 
 		StatutarniOrgan tempSO;
 
@@ -135,21 +93,80 @@ public class CompanyDAOImpl implements CompanyDAO {
 		NodeList tempNodeList = doc.getElementsByTagName("dtt:Clen_SO");
 		Element tempE = (Element) tempNodeList.item(0);
 
-		{
-
-			for (int i = 0; i < tempNodeList.getLength(); i++) {
-				tempSO = new StatutarniOrgan();
-				tempE = (Element) tempNodeList.item(i);
-				tempSO.setFunkce(tempE.getElementsByTagName("dtt:Funkce").item(0).getTextContent());
-				if (!(tempE.getElementsByTagName("dtt:Jmeno").item(0) == null)) {
-					tempSO.setJmeno(tempE.getElementsByTagName("dtt:Jmeno").item(0).getTextContent());
-					tempSO.setPrijmeni(tempE.getElementsByTagName("dtt:Prijmeni").item(0).getTextContent());
-					firma.getClenoveStatutarnihoOrganu().add(tempSO);
-				}
-
+		// Procházím kolekci statutárních orgánů společnosti a ukládám jejich údaje
+		// (Jméno, příjmení a funkci) do instance objektu Firma
+		for (int i = 0; i < tempNodeList.getLength(); i++) {
+			tempSO = new StatutarniOrgan();
+			tempE = (Element) tempNodeList.item(i);
+			tempSO.setFunkce(tempE.getElementsByTagName("dtt:Funkce").item(0).getTextContent());
+			if (!(tempE.getElementsByTagName("dtt:Jmeno").item(0) == null)) {
+				tempSO.setJmeno(tempE.getElementsByTagName("dtt:Jmeno").item(0).getTextContent().toLowerCase());
+				tempSO.setPrijmeni(tempE.getElementsByTagName("dtt:Prijmeni").item(0).getTextContent().toLowerCase());
+				// První písmeno ve jméně bude velké 
+				tempSO.setJmeno(tempSO.getJmeno().substring(0,1).toUpperCase() + tempSO.getJmeno().substring(1));
+				tempSO.setPrijmeni(tempSO.getPrijmeni().substring(0,1).toUpperCase() + tempSO.getPrijmeni().substring(1));
+				firma.getClenoveStatutarnihoOrganu().add(tempSO);
 			}
+
 		}
 
 	}
 
+	// Získávám údaje o základním kapitálu společnosti
+	private void zjistiZakladniKapital() {
+		// Získávám údaje o základním kapitálu společnosti
+		tempNodeList = doc.getElementsByTagName("dtt:Kapital");
+
+		// Zjišťuji, zda má firma základní kapitál
+		if (tempNodeList.item(0) == null) {
+			firma.setZakladniKapital("Tato společnost nemá základní kapitál");
+		} else {
+			tempE = (Element) tempNodeList.item(0);
+
+			// Vhodně formátuji hodnotu o základním kapitálu (Odstraňuji zbytečný znak a
+			// přidávám "Kč" nakonec)
+			String vklad = tempE.getElementsByTagName("dtt:Kc").item(0).getTextContent();
+			if (vklad.contains(";")) {
+				vklad = vklad.substring(0, vklad.indexOf(";"));
+			}
+			vklad = vklad.concat(" Kč");
+			firma.setZakladniKapital(vklad);
+		}
+
+	}
+
+	// Získávám údaje o názvu společnosti
+	private void zjistiNazev() {
+		tempNodeList = doc.getElementsByTagName("dtt:Obchodni_firma");
+		firma.setNazevFirmy(tempNodeList.item(0).getTextContent());
+
+	}
+
+	// Získávám údaje o sídle společnosti
+	private void zjistiSidlo() {
+		tempNodeList = doc.getElementsByTagName("dtt:Sidlo");
+		tempE = (Element) tempNodeList.item(0);
+
+	}
+
+	// Získávám údaje o předmětech podnikání
+	private void pridejPredmetyPodnikani() {
+
+		// Získávám kolekci předmětů podnikání
+		tempNodeList = doc.getElementsByTagName("dtt:Predmet_podnikani");
+		tempE = (Element) tempNodeList.item(0);
+		// Procházím kolekci předmětů podnikání
+		for (int i = 0; i < tempE.getElementsByTagName("dtt:Text").getLength(); i++) {
+			firma.getPredmetPodnikani().add(tempE.getElementsByTagName("dtt:Text").item(i).getTextContent());
+		}
+
+	}
+
+	// Získávám údaje o právní formě podnikání
+	private void zjistiPravniFormu() {
+		tempNodeList = doc.getElementsByTagName("dtt:Zakladni_udaje");
+		tempE = (Element) tempNodeList.item(0);
+		firma.setPravniForma(tempE.getElementsByTagName("dtt:Nazev_PF").item(0).getTextContent());
+
+	}
 }

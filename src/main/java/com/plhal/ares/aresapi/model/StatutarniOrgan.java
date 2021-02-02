@@ -1,5 +1,6 @@
 package com.plhal.ares.aresapi.model;
 
+// Statutární orgán společnost
 public class StatutarniOrgan {
 
 	private String jmeno;

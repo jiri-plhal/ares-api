@@ -1,0 +1,43 @@
+<!DOCTYPE HTML>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+<!-- Required meta tags -->
+<meta charset="utf-8">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+<!-- Bootstrap CSS -->
+<link rel="stylesheet"
+	href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"
+	integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS"
+	crossorigin="anonymous">
+
+<title>Vyhledávání firem</title>
+</head>
+
+<body>
+
+	<div class="container">
+		<br>
+		<h3>Vyhledávání firem</h3>
+		<br>
+		<br> Zadejte IČO firmy:
+
+		<form action="#" th:action="@{/hledej}"  method="GET">
+
+	 		<input type="text" name="icoFirmy"
+				class="form-control mb-4 col-4" placeholder="ico">
+ 
+			<button type="submit" class="btn btn-info col-2">Hledej</button>
+
+		</form>
+
+
+	</div>
+
+</body>
+</html>
+
+
+

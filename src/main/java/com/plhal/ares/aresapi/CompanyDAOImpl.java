@@ -102,9 +102,10 @@ public class CompanyDAOImpl implements CompanyDAO {
 			if (!(tempE.getElementsByTagName("dtt:Jmeno").item(0) == null)) {
 				tempSO.setJmeno(tempE.getElementsByTagName("dtt:Jmeno").item(0).getTextContent().toLowerCase());
 				tempSO.setPrijmeni(tempE.getElementsByTagName("dtt:Prijmeni").item(0).getTextContent().toLowerCase());
-				// První písmeno ve jméně bude velké 
-				tempSO.setJmeno(tempSO.getJmeno().substring(0,1).toUpperCase() + tempSO.getJmeno().substring(1));
-				tempSO.setPrijmeni(tempSO.getPrijmeni().substring(0,1).toUpperCase() + tempSO.getPrijmeni().substring(1));
+				// První písmeno ve jméně bude velké
+				tempSO.setJmeno(tempSO.getJmeno().substring(0, 1).toUpperCase() + tempSO.getJmeno().substring(1));
+				tempSO.setPrijmeni(
+						tempSO.getPrijmeni().substring(0, 1).toUpperCase() + tempSO.getPrijmeni().substring(1));
 				firma.getClenoveStatutarnihoOrganu().add(tempSO);
 			}
 
@@ -146,6 +147,22 @@ public class CompanyDAOImpl implements CompanyDAO {
 	private void zjistiSidlo() {
 		tempNodeList = doc.getElementsByTagName("dtt:Sidlo");
 		tempE = (Element) tempNodeList.item(0);
+
+		// Vhodně formátuji údaje z XML dokumentu a potom jej přiřadím jako řetězec do
+		// instance objektu firmy
+		String sidlo = "";
+		sidlo = sidlo.concat(tempE.getElementsByTagName("dtt:Nazev_ulice").item(0).getTextContent()).concat(" ");
+		if (tempE.getElementsByTagName("dtt:Cislo_domovni").item(0) == null) {
+			sidlo = sidlo.concat(tempE.getElementsByTagName("dtt:Cislo_do_adresy").item(0).getTextContent());
+		} else {
+			sidlo = sidlo.concat(tempE.getElementsByTagName("dtt:Cislo_domovni").item(0).getTextContent()).concat("/")
+					.concat(tempE.getElementsByTagName("dtt:Cislo_orientacni").item(0).getTextContent());
+		}
+
+		sidlo = sidlo.concat(", ").concat(tempE.getElementsByTagName("dtt:Nazev_obce").item(0).getTextContent())
+				.concat(", ").concat(tempE.getElementsByTagName("dtt:PSC").item(0).getTextContent()).concat(" ")
+				.concat(tempE.getElementsByTagName("dtt:Nazev_obce").item(0).getTextContent());
+		firma.setSidlo(sidlo);
 
 	}
 

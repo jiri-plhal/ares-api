@@ -13,7 +13,6 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 import com.plhal.ares.aresapi.model.Firma;
-import com.plhal.ares.aresapi.model.FyzickaOsoba;
 import com.plhal.ares.aresapi.model.StatutarniOrgan;
 
 @Repository
@@ -55,7 +54,8 @@ public class CompanyDAOImpl implements CompanyDAO {
 
 			// Získávám údaje o základním kapitálu společnosti
 			tempNodeList = doc.getElementsByTagName("dtt:Kapital");
-			if (tempNodeList != null) {
+			System.out.println("*****" + tempNodeList.item(0) + "******");
+			if (tempNodeList.item(0) == null) {
 				firma.setZakladniKapital("Tato společnost nemá základní kapitál");
 			} else {
 				tempE = (Element) tempNodeList.item(0);
@@ -135,33 +135,20 @@ public class CompanyDAOImpl implements CompanyDAO {
 		NodeList tempNodeList = doc.getElementsByTagName("dtt:Clen_SO");
 		Element tempE = (Element) tempNodeList.item(0);
 
-		if (tempE.getElementsByTagName("dtt:Obchodni_firma").item(0) == null) {
+		{
 
 			for (int i = 0; i < tempNodeList.getLength(); i++) {
-				tempSO = new FyzickaOsoba();
+				tempSO = new StatutarniOrgan();
 				tempE = (Element) tempNodeList.item(i);
-				((FyzickaOsoba) tempSO).setFunkce(tempE.getElementsByTagName("dtt:Funkce").item(0).getTextContent());
+				tempSO.setFunkce(tempE.getElementsByTagName("dtt:Funkce").item(0).getTextContent());
 				if (!(tempE.getElementsByTagName("dtt:Jmeno").item(0) == null)) {
-					((FyzickaOsoba) tempSO).setJmeno(tempE.getElementsByTagName("dtt:Jmeno").item(0).getTextContent());
-					((FyzickaOsoba) tempSO)
-							.setPrijmeni(tempE.getElementsByTagName("dtt:Prijmeni").item(0).getTextContent());
+					tempSO.setJmeno(tempE.getElementsByTagName("dtt:Jmeno").item(0).getTextContent());
+					tempSO.setPrijmeni(tempE.getElementsByTagName("dtt:Prijmeni").item(0).getTextContent());
 					firma.getClenoveStatutarnihoOrganu().add(tempSO);
 				}
 
 			}
-		} else {
-
-			for (int i = 0; i < tempNodeList.getLength(); i++) {
-				tempSO = new Firma();
-				tempE = (Element) tempNodeList.item(i);
-				((Firma) tempSO)
-						.setNazevFirmy(tempE.getElementsByTagName("dtt:Obchodni_firma").item(0).getTextContent());
-				firma.getClenoveStatutarnihoOrganu().add(tempSO);
-			}
-			
-
 		}
-		// Nastavuji údaje jednotlivých členů statutárních orgánů (z předchozí kolekce)
 
 	}
 

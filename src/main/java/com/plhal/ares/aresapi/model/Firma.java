@@ -4,10 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 //Údaje o firmě, kterou chceme zobrazit
-public class Firma implements StatutarniOrgan{
+public class Firma {
 
 	private String nazevFirmy;
-	
+
 	private String pravniForma;
 
 	private List<StatutarniOrgan> clenoveStatutarnihoOrganu;
@@ -22,20 +22,14 @@ public class Firma implements StatutarniOrgan{
 		clenoveStatutarnihoOrganu = new ArrayList<>();
 		predmetPodnikani = new ArrayList<>();
 	}
-	
-	
 
 	public String getPravniForma() {
 		return pravniForma;
 	}
 
-
-
 	public void setPravniForma(String pravniForma) {
 		this.pravniForma = pravniForma;
 	}
-
-
 
 	public String getNazevFirmy() {
 		return nazevFirmy;

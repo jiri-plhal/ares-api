@@ -1,4 +1,4 @@
-package com.plhal.ares.aresapi;
+package com.plhal.ares.aresapi.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -7,7 +7,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.plhal.ares.aresapi.model.Firma;
+import com.plhal.ares.aresapi.service.DataService;
 
+// Controller - řídí celou aplikaci a na základě zadané URL provede potřebné úkony
 @Controller
 public class CompanyController {
 

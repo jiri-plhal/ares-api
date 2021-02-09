@@ -3,7 +3,7 @@ package com.plhal.ares.aresapi.model;
 import java.util.ArrayList;
 import java.util.List;
 
-// Třída Firma, do které ukládám všechny požadované informace
+// Třída Firma, do které ukládám všechny požadované informace a kterou poté předávám do modelu
 public class Firma {
 
 	private String nazevFirmy;

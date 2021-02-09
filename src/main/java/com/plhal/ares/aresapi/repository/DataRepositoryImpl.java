@@ -1,4 +1,4 @@
-package com.plhal.ares.aresapi;
+package com.plhal.ares.aresapi.repository;
 
 import java.io.IOException;
 
@@ -15,8 +15,9 @@ import org.xml.sax.SAXException;
 import com.plhal.ares.aresapi.model.Firma;
 import com.plhal.ares.aresapi.model.StatutarniOrgan;
 
+// Implementace adresáře. Zde se získávají a zpracovávají informace z API ARESU.
 @Repository
-public class CompanyDAOImpl implements CompanyDAO {
+public class DataRepositoryImpl implements DataRepository {
 
 	// Preffix a Suffix URL adresy ze kterého získám XML dokument s informace z
 	// obchodního rejstříku. Mezi preffixem a suffixem je identifikační číslo firmy
@@ -33,6 +34,8 @@ public class CompanyDAOImpl implements CompanyDAO {
 	private NodeList tempNodeList;
 	private Element tempE;
 
+	
+	// Metoda, která vrací instanci objektu naplněnou požadovanými daty o  firmě
 	public Firma najdiFirmu(String ICO) {
 
 		firma = new Firma();
@@ -88,6 +91,7 @@ public class CompanyDAOImpl implements CompanyDAO {
 
 	}
 
+	// Získávám údaje o členech SU
 	private void pridejClenyStatutarnihoOrganu() {
 
 		// Pomocný objekt pro uložení informací o statutárním orgánu společnosti.

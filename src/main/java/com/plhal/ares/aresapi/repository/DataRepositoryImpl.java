@@ -189,6 +189,12 @@ public class DataRepositoryImpl implements DataRepository {
 		// Získávám kolekci předmětů podnikání
 		tempNodeList = doc.getElementsByTagName("dtt:Predmet_podnikani");
 		tempE = (Element) tempNodeList.item(0);
+		
+		// Testuji, zda firma má předmět podnikání
+		if (tempE == null) {
+			firma.getPredmetPodnikani().add("Neexistuje předmět podnikání");
+			return;
+		}
 		// Procházím kolekci předmětů podnikání
 		for (int i = 0; i < tempE.getElementsByTagName("dtt:Text").getLength(); i++) {
 			

@@ -1,6 +1,6 @@
 package com.plhal.ares.aresapi.model;
 
-// Statutární orgán společnost
+// Třída statutárního orgánu, které potom přidávám do kolekce ve třídě Firma
 public class StatutarniOrgan {
 
 	private String jmeno;

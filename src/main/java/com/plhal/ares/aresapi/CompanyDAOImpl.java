@@ -26,12 +26,12 @@ public class CompanyDAOImpl implements CompanyDAO {
 	// Instance společnosti, kterou budu zjištovat a naplňovat daty
 	private Firma firma;
 
-	// Proměnná, ze které budu parsovat XML dokument
-	Document doc;
+	// Objekt do kterého budu parsovat XML dokument
+	private Document doc;
 
-	// Pomocné objekty pro parsování XML dokumentu
-	NodeList tempNodeList;
-	Element tempE;
+	// Pomocné objekty pro procházení XML dokumentu
+	private NodeList tempNodeList;
+	private Element tempE;
 
 	public Firma najdiFirmu(String ICO) {
 
@@ -44,42 +44,45 @@ public class CompanyDAOImpl implements CompanyDAO {
 
 			builder = factory.newDocumentBuilder();
 
-			// Získávám XML dokument z URL adresy ARES-API
+			// Získávám XML dokument z URL adresy
 			doc = builder.parse(urlPreffix + ICO + urlSuffix);
-
-			// Kontroluji, zda daná firma existuje, pokud ne vracím null
-			if (doc.getElementsByTagName("dtt:Error").getLength() > 0) {
-				return null;
-			}
-
-			// Volám metodu pro získání členů statutárních orgánů
-			this.pridejClenyStatutarnihoOrganu();
-
-			// Získávám údaje o základním kapitálu společnosti
-			this.zjistiZakladniKapital();
-
-			// Získávám údaje o názvu společnosti
-			this.zjistiNazev();
-
-			// Získávám údaje o sídle společnosti
-			this.zjistiSidlo();
-
-			// Získávám údaje o předmětech podnikání
-			this.pridejPredmetyPodnikani();
-
-			// Získávám údaje o právní formě podnikání
-			this.zjistiPravniFormu();
 
 		} catch (ParserConfigurationException e) {
 
 			e.printStackTrace();
+			return null;
 		} catch (SAXException e) {
 
 			e.printStackTrace();
+			return null;
 		} catch (IOException e) {
 
 			e.printStackTrace();
+			return null;
 		}
+
+		// Kontroluji, zda daná firma existuje, pokud ne vracím null
+		if (doc.getElementsByTagName("dtt:Error").getLength() > 0) {
+			return null;
+		}
+
+		// Volám metodu pro získání členů statutárních orgánů
+		this.pridejClenyStatutarnihoOrganu();
+
+		// Získávám údaje o základním kapitálu společnosti
+		this.zjistiZakladniKapital();
+
+		// Získávám údaje o názvu společnosti
+		this.zjistiNazev();
+
+		// Získávám údaje o sídle společnosti
+		this.zjistiSidlo();
+
+		// Získávám údaje o předmětech podnikání
+		this.pridejPredmetyPodnikani();
+
+		// Získávám údaje o právní formě podnikání
+		this.zjistiPravniFormu();
 
 		return firma;
 
@@ -87,6 +90,7 @@ public class CompanyDAOImpl implements CompanyDAO {
 
 	private void pridejClenyStatutarnihoOrganu() {
 
+		// Pomocný objekt pro uložení informací o statutárním orgánu společnosti.
 		StatutarniOrgan tempSO;
 
 		// Získávám kolekci členů statutárního orgánu
@@ -94,18 +98,26 @@ public class CompanyDAOImpl implements CompanyDAO {
 		Element tempE = (Element) tempNodeList.item(0);
 
 		// Procházím kolekci statutárních orgánů společnosti a ukládám jejich údaje
-		// (Jméno, příjmení a funkci) do instance objektu Firma
+		// (Jméno, příjmení a funkci) do pomocného objektu tempSO
 		for (int i = 0; i < tempNodeList.getLength(); i++) {
 			tempSO = new StatutarniOrgan();
 			tempE = (Element) tempNodeList.item(i);
-			tempSO.setFunkce(tempE.getElementsByTagName("dtt:Funkce").item(0).getTextContent());
+
+			// Testuji pro případ, že statutární orgán společnosti není fyzická osoba. V
+			// případě, že to není fyzická osoba,
+			// ve výpise se nezobrazí.
 			if (!(tempE.getElementsByTagName("dtt:Jmeno").item(0) == null)) {
+
+				// Nastavuji jméno, příjmení a funkci statutárního orgánu
+				tempSO.setFunkce(tempE.getElementsByTagName("dtt:Funkce").item(0).getTextContent());
 				tempSO.setJmeno(tempE.getElementsByTagName("dtt:Jmeno").item(0).getTextContent().toLowerCase());
 				tempSO.setPrijmeni(tempE.getElementsByTagName("dtt:Prijmeni").item(0).getTextContent().toLowerCase());
-				// První písmeno ve jméně bude velké
+				// První písmeno ve jméně a příjmení bude velké
 				tempSO.setJmeno(tempSO.getJmeno().substring(0, 1).toUpperCase() + tempSO.getJmeno().substring(1));
 				tempSO.setPrijmeni(
 						tempSO.getPrijmeni().substring(0, 1).toUpperCase() + tempSO.getPrijmeni().substring(1));
+
+				// Přidávám člena statutárního orgánu do firmy
 				firma.getClenoveStatutarnihoOrganu().add(tempSO);
 			}
 
@@ -115,7 +127,7 @@ public class CompanyDAOImpl implements CompanyDAO {
 
 	// Získávám údaje o základním kapitálu společnosti
 	private void zjistiZakladniKapital() {
-		// Získávám údaje o základním kapitálu společnosti
+
 		tempNodeList = doc.getElementsByTagName("dtt:Kapital");
 
 		// Zjišťuji, zda má firma základní kapitál
@@ -148,8 +160,7 @@ public class CompanyDAOImpl implements CompanyDAO {
 		tempNodeList = doc.getElementsByTagName("dtt:Sidlo");
 		tempE = (Element) tempNodeList.item(0);
 
-		// Vhodně formátuji údaje z XML dokumentu a potom jej přiřadím jako řetězec do
-		// instance objektu firmy
+		// Vhodně formátuji údaje z XML dokumentu (celá adresa bude jeden řetězec)
 		String sidlo = "";
 		sidlo = sidlo.concat(tempE.getElementsByTagName("dtt:Nazev_ulice").item(0).getTextContent()).concat(" ");
 		if (tempE.getElementsByTagName("dtt:Cislo_domovni").item(0) == null) {
@@ -162,6 +173,8 @@ public class CompanyDAOImpl implements CompanyDAO {
 		sidlo = sidlo.concat(", ").concat(tempE.getElementsByTagName("dtt:Nazev_obce").item(0).getTextContent())
 				.concat(", ").concat(tempE.getElementsByTagName("dtt:PSC").item(0).getTextContent()).concat(" ")
 				.concat(tempE.getElementsByTagName("dtt:Nazev_obce").item(0).getTextContent());
+
+		// Nastavuji sídlo společnosti
 		firma.setSidlo(sidlo);
 
 	}
@@ -174,6 +187,8 @@ public class CompanyDAOImpl implements CompanyDAO {
 		tempE = (Element) tempNodeList.item(0);
 		// Procházím kolekci předmětů podnikání
 		for (int i = 0; i < tempE.getElementsByTagName("dtt:Text").getLength(); i++) {
+			
+			// Přidávám předměty podnikání do kolekce
 			firma.getPredmetPodnikani().add(tempE.getElementsByTagName("dtt:Text").item(i).getTextContent());
 		}
 

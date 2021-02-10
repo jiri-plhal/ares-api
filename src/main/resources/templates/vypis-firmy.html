@@ -34,10 +34,7 @@
 		<p class="font-weight-bold" th:text="${firma.sidlo}" />
 		
 		<br> Předmět podnikání:
-		<p class="font-weight-bold" th:each="predmetPodnikani: ${firma.predmetPodnikani}">
-			<td th:text="${predmetPodnikani}" >test</td>	
-		</p>
-		
+		<li class="font-weight-bold" th:each="predmetPodnikani: ${firma.predmetPodnikani}" th:text="${predmetPodnikani}"></li>
 			<br> Statutární orgány: <br> <br>
 			
 			

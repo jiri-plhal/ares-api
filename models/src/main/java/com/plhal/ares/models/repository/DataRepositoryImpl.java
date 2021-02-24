@@ -1,4 +1,4 @@
-package com.plhal.ares.aresapi.repository;
+package com.plhal.ares.models.repository;
 
 import java.io.IOException;
 
@@ -12,8 +12,8 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
-import com.plhal.ares.aresapi.model.Firma;
-import com.plhal.ares.aresapi.model.StatutarniOrgan;
+import com.plhal.ares.models.model.Firma;
+import com.plhal.ares.models.model.StatutarniOrgan;
 
 // Implementace adresáře. Zde se získávají a zpracovávají informace z API ARESU.
 @Repository

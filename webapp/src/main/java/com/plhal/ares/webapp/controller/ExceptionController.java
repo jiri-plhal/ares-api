@@ -1,4 +1,4 @@
-package com.plhal.ares.aresapi.controller;
+package com.plhal.ares.webapp.controller;
 
 import org.springframework.ui.Model;
 import org.springframework.web.bind.MissingServletRequestParameterException;

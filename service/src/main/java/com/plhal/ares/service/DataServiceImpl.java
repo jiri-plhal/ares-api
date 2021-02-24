@@ -1,10 +1,10 @@
-package com.plhal.ares.models.service;
+package com.plhal.ares.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.plhal.ares.models.model.Firma;
-import com.plhal.ares.models.repository.DataRepository;
+import com.plhal.ares.model.Firma;
+import com.plhal.ares.model.DataRepository;
 
 // Třída, určená pro manipulaci s daty
 @Service

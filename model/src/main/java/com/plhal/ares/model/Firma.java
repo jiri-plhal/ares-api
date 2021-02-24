@@ -1,4 +1,4 @@
-package com.plhal.ares.models.model;
+package com.plhal.ares.model;
 
 import java.util.ArrayList;
 import java.util.List;

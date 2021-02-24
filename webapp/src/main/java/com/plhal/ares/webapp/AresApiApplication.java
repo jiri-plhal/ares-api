@@ -2,15 +2,9 @@ package com.plhal.ares.webapp;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.ComponentScan;
-
-import java.net.URL;
-
-import java.net.URLClassLoader;
-import java.util.Arrays;
 
 
-@SpringBootApplication(scanBasePackages = "com.plhal.ares.models")
+@SpringBootApplication(scanBasePackages = {"com.plhal.ares.webapp", "com.plhal.ares.service", "com.plhal.ares.model"})
 public class AresApiApplication {
 
 	public static void main(String[] args) {

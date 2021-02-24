@@ -1,4 +1,4 @@
-package com.plhal.ares.models.model;
+package com.plhal.ares.model;
 
 // Třída statutárního orgánu (instance tohoto objektu jsou přidávány do třídy Firma)
 public class StatutarniOrgan {

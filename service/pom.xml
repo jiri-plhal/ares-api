@@ -5,11 +5,11 @@
     <parent>
         <artifactId>ares-api</artifactId>
         <groupId>com.plhal.ares</groupId>
-        <version>0.0.1-SNAPSHOT</version>
+        <version>${project.version}</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>ares-api.models</artifactId>
+    <artifactId>ares-api.service</artifactId>
 
     <properties>
         <maven.compiler.source>11</maven.compiler.source>
@@ -17,9 +17,11 @@
     </properties>
 
     <dependencies>
-
-        <!-- Project modules -->
-
+        <dependency>
+            <artifactId>ares-api.model</artifactId>
+            <groupId>com.plhal.ares</groupId>
+            <version>${project.version}</version>
+        </dependency>
     </dependencies>
 
 </project>

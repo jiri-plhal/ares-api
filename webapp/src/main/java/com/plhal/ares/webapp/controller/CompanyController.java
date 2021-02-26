@@ -3,7 +3,6 @@ package com.plhal.ares.webapp.controller;
 
 import com.plhal.ares.model.Firma;
 import com.plhal.ares.service.DataService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,37 +12,40 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Controller
 public class CompanyController {
 
-	@Autowired
-	private DataService dataService;
+    private final DataService dataService;
 
-	// Nastaví mapování pro úvodní stránku
-	@GetMapping("/")
-	public String uvodniStranka() {
+    public CompanyController(DataService dataService) {
+        this.dataService = dataService;
+    }
 
-		return "uvod";
-	}
+    // Nastaví mapování pro úvodní stránku
+    @GetMapping("/")
+    public String uvodniStranka() {
 
-	// Mapování pro stránku hledej
-	// Pomocí anotace @RequestParam získáme IČO firmy, které uživatel vyplnil do
-	// vyhledávacího pole
-	@GetMapping("/hledej")
-	public String company(@RequestParam("icoFirmy") String icoFirmy, Model model) {
+        return "uvod";
+    }
 
-		Firma comp;
+    // Mapování pro stránku hledej
+    // Pomocí anotace @RequestParam získáme IČO firmy, které uživatel vyplnil do
+    // vyhledávacího pole
+    @GetMapping("/hledej")
+    public String company(@RequestParam("icoFirmy") String icoFirmy, Model model) {
 
-		// Vyhledá firmu a přiřadí její údaje do objektu comp, pokud není firma
-		// nenalezena bude v objektu comp null
-		comp = dataService.najdiFirmu(icoFirmy);
+        Firma comp;
 
-		// Pokud je firma nenalezena, uživatele pošleme na stránku nenalezen.html
-		if (comp == null) {
-			return "nenalezen";
-		}
+        // Vyhledá firmu a přiřadí její údaje do objektu comp, pokud není firma
+        // nenalezena bude v objektu comp null
+        comp = dataService.najdiFirmu(icoFirmy);
 
-		// Přidáme firmu do modelu, abychom k tomuto objektu měli přístup v html
-		// dokumentu
-		model.addAttribute("firma", comp);
+        // Pokud je firma nenalezena, uživatele pošleme na stránku nenalezen.html
+        if (comp == null) {
+            return "nenalezen";
+        }
 
-		return "vypis-firmy";
-	}
+        // Přidáme firmu do modelu, abychom k tomuto objektu měli přístup v html
+        // dokumentu
+        model.addAttribute("firma", comp);
+
+        return "vypis-firmy";
+    }
 }

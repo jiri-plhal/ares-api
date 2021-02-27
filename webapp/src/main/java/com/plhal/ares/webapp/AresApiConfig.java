@@ -5,6 +5,7 @@ import com.plhal.ares.model.DataRepository;
 import com.plhal.ares.model.DataRepositoryImpl;
 import com.plhal.ares.service.DataService;
 import com.plhal.ares.service.DataServiceImpl;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -24,4 +25,9 @@ public class AresApiConfig {
 
     }
 
+    @Bean
+    @ConfigurationProperties("ares-api-properties")
+    public AresApiProperties aresApiProperties() {
+        return new AresApiProperties();
+    }
 }

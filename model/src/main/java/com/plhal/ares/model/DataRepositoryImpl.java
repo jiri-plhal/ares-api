@@ -19,8 +19,6 @@ public class DataRepositoryImpl implements DataRepository {
 
     // Preffix a Suffix URL adresy ze kterého získám XML dokument s informace z
     // obchodního rejstříku. Mezi preffixem a suffixem je identifikační číslo firmy
-    private final String URL_PREFIX = "http://wwwinfo.mfcr.cz/cgi-bin/ares/darv_or.cgi?ico=";
-    private final String URL_SUFIX = "&xml=0&ver=1.0.2";
     private final AresApiProperties aresApiProperties;
 
     // Instance společnosti, kterou budu zjištovat a naplňovat daty

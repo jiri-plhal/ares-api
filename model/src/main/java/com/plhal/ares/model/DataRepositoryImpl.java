@@ -19,20 +19,21 @@ public class DataRepositoryImpl implements DataRepository {
 
     // Preffix a Suffix URL adresy ze kterého získám XML dokument s informace z
     // obchodního rejstříku. Mezi preffixem a suffixem je identifikační číslo firmy
-    private final AresApiProperties aresApiProperties;
+    private final DataRepositoryProperties DATA_REPOSITORY_PROPERTIES;
 
     // Instance společnosti, kterou budu zjištovat a naplňovat daty
     private Firma firma;
 
     // Objekt do kterého budu parsovat XML dokument
+
     private Document doc;
 
     // Pomocné objekty pro procházení XML dokumentu
     private NodeList tempNodeList;
     private Element tempE;
 
-    public DataRepositoryImpl(AresApiProperties aresApiProperties) {
-        this.aresApiProperties = aresApiProperties;
+    public DataRepositoryImpl(DataRepositoryProperties dataRepositoryProperties) {
+        DATA_REPOSITORY_PROPERTIES = dataRepositoryProperties;
     }
 
     /**
@@ -54,7 +55,7 @@ public class DataRepositoryImpl implements DataRepository {
             builder = factory.newDocumentBuilder();
 
             // Získávám XML dokument z URL adresy
-            doc = builder.parse(aresApiProperties.getUrlPrefix() + ico + aresApiProperties.getUrlSufix());
+            doc = builder.parse(DATA_REPOSITORY_PROPERTIES.getUrlPrefix() + ico + DATA_REPOSITORY_PROPERTIES.getUrlSufix());
 
         } catch (ParserConfigurationException e) {
 

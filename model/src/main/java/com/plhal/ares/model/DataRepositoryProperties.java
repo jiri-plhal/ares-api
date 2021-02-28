@@ -2,10 +2,11 @@ package com.plhal.ares.model;
 
 import lombok.Data;
 
+import java.net.URL;
+
 @Data
-public class AresApiProperties {
+public class DataRepositoryProperties {
 
-    private String urlPrefix;
+    private URL urlPrefix;
     private String urlSufix;
-
 }

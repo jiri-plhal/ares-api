@@ -1,8 +1,8 @@
 package com.plhal.ares.webapp;
 
-import com.plhal.ares.model.AresApiProperties;
 import com.plhal.ares.model.DataRepository;
 import com.plhal.ares.model.DataRepositoryImpl;
+import com.plhal.ares.model.DataRepositoryProperties;
 import com.plhal.ares.service.DataService;
 import com.plhal.ares.service.DataServiceImpl;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -14,8 +14,8 @@ public class AresApiConfig {
 
 
     @Bean
-    public DataRepository dataRepository(AresApiProperties aresApiProperties) {
-        return new DataRepositoryImpl(aresApiProperties);
+    public DataRepository dataRepository(DataRepositoryProperties dataRepositoryProperties) {
+        return new DataRepositoryImpl(dataRepositoryProperties);
     }
 
     @Bean
@@ -27,7 +27,13 @@ public class AresApiConfig {
 
     @Bean
     @ConfigurationProperties("ares-api-properties")
-    public AresApiProperties aresApiProperties() {
-        return new AresApiProperties();
+    public AresApiProperties aresApiProperties(DataRepositoryProperties dataRepositoryProperties) {
+        return new AresApiProperties(dataRepositoryProperties);
+    }
+
+    @Bean
+    @ConfigurationProperties("data-repository-properties")
+    public DataRepositoryProperties dataRepositoryProperties() {
+        return new DataRepositoryProperties();
     }
 }

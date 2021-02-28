@@ -1,6 +1,5 @@
 package com.plhal.ares.model;
 
-import com.plhal.ares.model.Firma;
 
 /**
  * Interface for getting informations about company

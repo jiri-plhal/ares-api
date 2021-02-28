@@ -6,7 +6,6 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
-import org.springframework.stereotype.Repository;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
@@ -15,7 +14,7 @@ import org.xml.sax.SAXException;
 /**
  * Concrete implementation of class for getting informations about requested company from Czech business register.
  */
-@Repository
+
 public class DataRepositoryImpl implements DataRepository {
 
     // Preffix a Suffix URL adresy ze kterého získám XML dokument s informace z

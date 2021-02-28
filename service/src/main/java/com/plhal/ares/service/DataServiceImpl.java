@@ -1,19 +1,19 @@
 package com.plhal.ares.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import com.plhal.ares.model.Firma;
 import com.plhal.ares.model.DataRepository;
 
 /**
  * Concrete implementation for service layer, which contains business logic for communication with model.
  */
-@Service
+
 public class DataServiceImpl implements DataService {
 
-    @Autowired
-    private DataRepository dataRepository;
+    private final DataRepository dataRepository;
+
+    public DataServiceImpl(DataRepository dataRepository) {
+        this.dataRepository = dataRepository;
+    }
 
 
     /**

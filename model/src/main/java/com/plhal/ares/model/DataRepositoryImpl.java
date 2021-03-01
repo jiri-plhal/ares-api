@@ -19,18 +19,22 @@ public class DataRepositoryImpl implements DataRepository {
 
     // Preffix a Suffix URL adresy ze kterého získám XML dokument s informace z
     // obchodního rejstříku. Mezi preffixem a suffixem je identifikační číslo firmy
-    private final String URL_PREFIX = "http://wwwinfo.mfcr.cz/cgi-bin/ares/darv_or.cgi?ico=";
-    private final String URL_SUFIX = "&xml=0&ver=1.0.2";
+    private DataRepositoryProperties dataRepositoryProperties;
 
     // Instance společnosti, kterou budu zjištovat a naplňovat daty
     private Firma firma;
 
     // Objekt do kterého budu parsovat XML dokument
+
     private Document doc;
 
     // Pomocné objekty pro procházení XML dokumentu
     private NodeList tempNodeList;
     private Element tempE;
+
+    public DataRepositoryImpl(DataRepositoryProperties dataRepositoryProperties) {
+        this.dataRepositoryProperties = dataRepositoryProperties;
+    }
 
     /**
      * This method finds informations about company from Czech business register based on Identification number
@@ -51,7 +55,7 @@ public class DataRepositoryImpl implements DataRepository {
             builder = factory.newDocumentBuilder();
 
             // Získávám XML dokument z URL adresy
-            doc = builder.parse(URL_PREFIX + ico + URL_SUFIX);
+            doc = builder.parse(dataRepositoryProperties.getUrlPrefix() + ico + dataRepositoryProperties.getUrlSufix());
 
         } catch (ParserConfigurationException e) {
 

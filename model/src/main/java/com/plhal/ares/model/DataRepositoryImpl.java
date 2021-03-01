@@ -1,6 +1,8 @@
 package com.plhal.ares.model;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -17,20 +19,7 @@ import org.xml.sax.SAXException;
 
 public class DataRepositoryImpl implements DataRepository {
 
-    // Preffix a Suffix URL adresy ze kterého získám XML dokument s informace z
-    // obchodního rejstříku. Mezi preffixem a suffixem je identifikační číslo firmy
     private DataRepositoryProperties dataRepositoryProperties;
-
-    // Instance společnosti, kterou budu zjištovat a naplňovat daty
-    private Firma firma;
-
-    // Objekt do kterého budu parsovat XML dokument
-
-    private Document doc;
-
-    // Pomocné objekty pro procházení XML dokumentu
-    private NodeList tempNodeList;
-    private Element tempE;
 
     public DataRepositoryImpl(DataRepositoryProperties dataRepositoryProperties) {
         this.dataRepositoryProperties = dataRepositoryProperties;
@@ -45,7 +34,8 @@ public class DataRepositoryImpl implements DataRepository {
      */
     public Firma najdiFirmu(String ico) {
 
-        firma = new Firma();
+        // Objekt do kterého budu parsovat XML dokument
+        Document doc;
 
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         DocumentBuilder builder;
@@ -76,33 +66,24 @@ public class DataRepositoryImpl implements DataRepository {
             return null;
         }
 
-        // Volám metodu pro získání členů statutárních orgánů
-        this.pridejClenyStatutarnihoOrganu();
-
-        // Získávám údaje o základním kapitálu společnosti
-        this.zjistiZakladniKapital();
-
-        // Získávám údaje o názvu společnosti
-        this.zjistiNazev();
-
-        // Získávám údaje o sídle společnosti
-        this.zjistiSidlo();
-
-        // Získávám údaje o předmětech podnikání
-        this.pridejPredmetyPodnikani();
-
-        // Získávám údaje o právní formě podnikání
-        this.zjistiPravniFormu();
+        // Instance společnosti, kterou budu zjištovat a naplňovat daty
+        Firma firma = Firma.builder()
+                .clenoveStatutarnihoOrganu(pridejClenyStatutarnihoOrganu(doc))
+                .zakladniKapital(zjistiZakladniKapital(doc))
+                .nazevFirmy(zjistiNazev(doc))
+                .sidlo(zjistiSidlo(doc))
+                .predmetPodnikani(pridejPredmetyPodnikani(doc))
+                .pravniForma(zjistiPravniFormu(doc))
+                .build();
 
         return firma;
 
     }
 
     // Získávám údaje o členech SU
-    private void pridejClenyStatutarnihoOrganu() {
+    private List<StatutarniOrgan> pridejClenyStatutarnihoOrganu(Document doc) {
 
-        // Pomocný objekt pro uložení informací o statutárním orgánu společnosti.
-        StatutarniOrgan tempSO;
+        List<StatutarniOrgan> listStatutarniOrgan = new ArrayList<>();
 
         // Získávám kolekci členů statutárního orgánu
         NodeList tempNodeList = doc.getElementsByTagName("dtt:Clen_SO");
@@ -111,7 +92,7 @@ public class DataRepositoryImpl implements DataRepository {
         // Procházím kolekci statutárních orgánů společnosti a ukládám jejich údaje
         // (Jméno, příjmení a funkci) do pomocného objektu tempSO
         for (int i = 0; i < tempNodeList.getLength(); i++) {
-            tempSO = new StatutarniOrgan();
+
             tempE = (Element) tempNodeList.item(i);
 
             // Testuji pro případ, že statutární orgán společnosti není fyzická osoba. V
@@ -119,57 +100,75 @@ public class DataRepositoryImpl implements DataRepository {
             // ve výpise se nezobrazí.
             if (!(tempE.getElementsByTagName("dtt:Jmeno").item(0) == null)) {
 
+                StatutarniOrgan tempSO;
+
+                String jmeno, prijmeni, funkce;
                 // Nastavuji jméno, příjmení a funkci statutárního orgánu
-                tempSO.setFunkce(tempE.getElementsByTagName("dtt:Funkce").item(0).getTextContent());
-                tempSO.setJmeno(tempE.getElementsByTagName("dtt:Jmeno").item(0).getTextContent().toLowerCase());
-                tempSO.setPrijmeni(tempE.getElementsByTagName("dtt:Prijmeni").item(0).getTextContent().toLowerCase());
+                funkce = tempE.getElementsByTagName("dtt:Funkce").item(0).getTextContent();
+                jmeno = tempE.getElementsByTagName("dtt:Jmeno").item(0).getTextContent().toLowerCase();
+                prijmeni = tempE.getElementsByTagName("dtt:Prijmeni").item(0).getTextContent().toLowerCase();
                 // První písmeno ve jméně a příjmení bude velké
-                tempSO.setJmeno(tempSO.getJmeno().substring(0, 1).toUpperCase() + tempSO.getJmeno().substring(1));
-                tempSO.setPrijmeni(
-                        tempSO.getPrijmeni().substring(0, 1).toUpperCase() + tempSO.getPrijmeni().substring(1));
+                jmeno = jmeno.substring(0, 1).toUpperCase() + jmeno.substring(1);
+                prijmeni = prijmeni.substring(0, 1).toUpperCase() + prijmeni.substring(1);
+
+                tempSO = StatutarniOrgan.builder()
+                        .prijmeni(prijmeni)
+                        .jmeno(jmeno)
+                        .funkce(funkce)
+                        .build();
 
                 // Přidávám člena statutárního orgánu do firmy
-                firma.getClenoveStatutarnihoOrganu().add(tempSO);
+                listStatutarniOrgan.add(tempSO);
             }
 
         }
 
+        return listStatutarniOrgan;
     }
 
     // Získávám údaje o základním kapitálu společnosti
-    private void zjistiZakladniKapital() {
+    private String zjistiZakladniKapital(Document doc) {
 
-        tempNodeList = doc.getElementsByTagName("dtt:Kapital");
+
+        String zakladniKapital;
+
+        NodeList tempNodeList = doc.getElementsByTagName("dtt:Kapital");
 
         // Zjišťuji, zda má firma základní kapitál
         if (tempNodeList.item(0) == null) {
-            firma.setZakladniKapital("Tato společnost nemá základní kapitál");
+            zakladniKapital = "Tato společnost nemá základní kapitál";
         } else {
-            tempE = (Element) tempNodeList.item(0);
+            Element tempE = (Element) tempNodeList.item(0);
 
             // Vhodně formátuji hodnotu o základním kapitálu (Odstraňuji zbytečný znak a
             // přidávám "Kč" nakonec)
-            String vklad = tempE.getElementsByTagName("dtt:Kc").item(0).getTextContent();
-            if (vklad.contains(";")) {
-                vklad = vklad.substring(0, vklad.indexOf(";"));
+            zakladniKapital = tempE.getElementsByTagName("dtt:Kc").item(0).getTextContent();
+            if (zakladniKapital.contains(";")) {
+                zakladniKapital = zakladniKapital.substring(0, zakladniKapital.indexOf(";"));
             }
-            vklad = vklad.concat(" Kč");
-            firma.setZakladniKapital(vklad);
-        }
+            zakladniKapital = zakladniKapital.concat(" Kč");
 
+        }
+        return zakladniKapital;
     }
 
     // Získávám údaje o názvu společnosti
-    private void zjistiNazev() {
-        tempNodeList = doc.getElementsByTagName("dtt:Obchodni_firma");
-        firma.setNazevFirmy(tempNodeList.item(0).getTextContent());
+    private String zjistiNazev(Document doc) {
+
+        String nazev;
+
+        NodeList tempNodeList = doc.getElementsByTagName("dtt:Obchodni_firma");
+        nazev = tempNodeList.item(0).getTextContent();
+
+        return nazev;
 
     }
 
     // Získávám údaje o sídle společnosti
-    private void zjistiSidlo() {
-        tempNodeList = doc.getElementsByTagName("dtt:Sidlo");
-        tempE = (Element) tempNodeList.item(0);
+    private String zjistiSidlo(Document doc) {
+
+        NodeList tempNodeList = doc.getElementsByTagName("dtt:Sidlo");
+        Element tempE = (Element) tempNodeList.item(0);
 
         // Vhodně formátuji údaje z XML dokumentu (celá adresa bude jeden řetězec)
         String sidlo = "";
@@ -186,36 +185,41 @@ public class DataRepositoryImpl implements DataRepository {
                 .concat(tempE.getElementsByTagName("dtt:Nazev_obce").item(0).getTextContent());
 
         // Nastavuji sídlo společnosti
-        firma.setSidlo(sidlo);
+        return sidlo;
 
     }
 
     // Získávám údaje o předmětech podnikání
-    private void pridejPredmetyPodnikani() {
+    private List<String> pridejPredmetyPodnikani(Document doc) {
+
+        List<String> predmetPodnikani = new ArrayList<>();
 
         // Získávám kolekci předmětů podnikání
-        tempNodeList = doc.getElementsByTagName("dtt:Predmet_podnikani");
-        tempE = (Element) tempNodeList.item(0);
+        NodeList tempNodeList = doc.getElementsByTagName("dtt:Predmet_podnikani");
+        Element tempE = (Element) tempNodeList.item(0);
 
         // Testuji, zda firma má předmět podnikání
         if (tempE == null) {
-            firma.getPredmetPodnikani().add("Neexistuje předmět podnikání");
-            return;
-        }
-        // Procházím kolekci předmětů podnikání
-        for (int i = 0; i < tempE.getElementsByTagName("dtt:Text").getLength(); i++) {
+            predmetPodnikani.add("Neexistuje předmět podnikání");
+        } else {
+            for (int i = 0; i < tempE.getElementsByTagName("dtt:Text").getLength(); i++) {
 
-            // Přidávám předměty podnikání do kolekce
-            firma.getPredmetPodnikani().add(tempE.getElementsByTagName("dtt:Text").item(i).getTextContent());
+                // Přidávám předměty podnikání do kolekce
+                predmetPodnikani.add(tempE.getElementsByTagName("dtt:Text").item(i).getTextContent());
+            }
         }
-
+        return predmetPodnikani;
     }
 
     // Získávám údaje o právní formě podnikání
-    private void zjistiPravniFormu() {
-        tempNodeList = doc.getElementsByTagName("dtt:Zakladni_udaje");
-        tempE = (Element) tempNodeList.item(0);
-        firma.setPravniForma(tempE.getElementsByTagName("dtt:Nazev_PF").item(0).getTextContent());
+    private String zjistiPravniFormu(Document doc) {
 
+        String pravniForma;
+
+        NodeList tempNodeList = doc.getElementsByTagName("dtt:Zakladni_udaje");
+        Element tempE = (Element) tempNodeList.item(0);
+        pravniForma = tempE.getElementsByTagName("dtt:Nazev_PF").item(0).getTextContent();
+
+        return pravniForma;
     }
 }

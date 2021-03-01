@@ -19,7 +19,7 @@ public class DataRepositoryImpl implements DataRepository {
 
     // Preffix a Suffix URL adresy ze kterého získám XML dokument s informace z
     // obchodního rejstříku. Mezi preffixem a suffixem je identifikační číslo firmy
-    private final DataRepositoryProperties DATA_REPOSITORY_PROPERTIES;
+    private DataRepositoryProperties dataRepositoryProperties;
 
     // Instance společnosti, kterou budu zjištovat a naplňovat daty
     private Firma firma;
@@ -33,7 +33,7 @@ public class DataRepositoryImpl implements DataRepository {
     private Element tempE;
 
     public DataRepositoryImpl(DataRepositoryProperties dataRepositoryProperties) {
-        DATA_REPOSITORY_PROPERTIES = dataRepositoryProperties;
+        this.dataRepositoryProperties = dataRepositoryProperties;
     }
 
     /**
@@ -55,7 +55,7 @@ public class DataRepositoryImpl implements DataRepository {
             builder = factory.newDocumentBuilder();
 
             // Získávám XML dokument z URL adresy
-            doc = builder.parse(DATA_REPOSITORY_PROPERTIES.getUrlPrefix() + ico + DATA_REPOSITORY_PROPERTIES.getUrlSufix());
+            doc = builder.parse(dataRepositoryProperties.getUrlPrefix() + ico + dataRepositoryProperties.getUrlSufix());
 
         } catch (ParserConfigurationException e) {
 

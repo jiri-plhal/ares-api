@@ -32,7 +32,6 @@ public class AresApiConfig {
     }
 
     @Bean
-    @ConfigurationProperties("data-repository-properties")
     public DataRepositoryProperties dataRepositoryProperties() {
         return new DataRepositoryProperties();
     }

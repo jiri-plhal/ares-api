@@ -1,14 +1,17 @@
 package com.plhal.ares.webapp;
 
 import com.plhal.ares.model.DataRepositoryProperties;
+import lombok.Getter;
+import org.springframework.boot.context.properties.NestedConfigurationProperty;
 
-
+@Getter
 public class AresApiProperties {
 
-    private final DataRepositoryProperties DATA_REPOSITORY_PROPERTIES;
+    @NestedConfigurationProperty
+    private DataRepositoryProperties dataRepositoryProperties;
 
     public AresApiProperties(DataRepositoryProperties dataRepositoryProperties) {
-        DATA_REPOSITORY_PROPERTIES = dataRepositoryProperties;
+        this.dataRepositoryProperties = dataRepositoryProperties;
     }
 
 }

@@ -8,6 +8,7 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
+import lombok.NonNull;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
@@ -66,8 +67,7 @@ public class DataRepositoryImpl implements DataRepository {
             return null;
         }
 
-        // Instance společnosti, kterou budu zjištovat a naplňovat daty
-        Firma firma = Firma.builder()
+        return Firma.builder()
                 .clenoveStatutarnihoOrganu(pridejClenyStatutarnihoOrganu(doc))
                 .zakladniKapital(zjistiZakladniKapital(doc))
                 .nazevFirmy(zjistiNazev(doc))
@@ -76,12 +76,10 @@ public class DataRepositoryImpl implements DataRepository {
                 .pravniForma(zjistiPravniFormu(doc))
                 .build();
 
-        return firma;
-
     }
 
     // Získávám údaje o členech SU
-    private List<StatutarniOrgan> pridejClenyStatutarnihoOrganu(Document doc) {
+    private @NonNull List<StatutarniOrgan> pridejClenyStatutarnihoOrganu(@NonNull Document doc) {
 
         List<StatutarniOrgan> listStatutarniOrgan = new ArrayList<>();
 
@@ -127,7 +125,7 @@ public class DataRepositoryImpl implements DataRepository {
     }
 
     // Získávám údaje o základním kapitálu společnosti
-    private String zjistiZakladniKapital(Document doc) {
+    private @NonNull String zjistiZakladniKapital(@NonNull Document doc) {
 
 
         String zakladniKapital;
@@ -153,7 +151,7 @@ public class DataRepositoryImpl implements DataRepository {
     }
 
     // Získávám údaje o názvu společnosti
-    private String zjistiNazev(Document doc) {
+    private @NonNull String zjistiNazev(@NonNull Document doc) {
 
         String nazev;
 
@@ -165,7 +163,7 @@ public class DataRepositoryImpl implements DataRepository {
     }
 
     // Získávám údaje o sídle společnosti
-    private String zjistiSidlo(Document doc) {
+    private @NonNull String zjistiSidlo(@NonNull Document doc) {
 
         NodeList tempNodeList = doc.getElementsByTagName("dtt:Sidlo");
         Element tempE = (Element) tempNodeList.item(0);
@@ -190,7 +188,7 @@ public class DataRepositoryImpl implements DataRepository {
     }
 
     // Získávám údaje o předmětech podnikání
-    private List<String> pridejPredmetyPodnikani(Document doc) {
+    private @NonNull List<String> pridejPredmetyPodnikani(@NonNull Document doc) {
 
         List<String> predmetPodnikani = new ArrayList<>();
 
@@ -212,7 +210,7 @@ public class DataRepositoryImpl implements DataRepository {
     }
 
     // Získávám údaje o právní formě podnikání
-    private String zjistiPravniFormu(Document doc) {
+    private @NonNull String zjistiPravniFormu(@NonNull Document doc) {
 
         String pravniForma;
 

@@ -1,40 +1,21 @@
 package com.plhal.ares.model;
 
+import lombok.Builder;
+import lombok.Data;
+import lombok.NonNull;
+
 // Třída statutárního orgánu (instance tohoto objektu jsou přidávány do třídy Firma)
+@Builder
+@Data
 public class StatutarniOrgan {
 
-	private String jmeno;
+    @NonNull
+    private String jmeno;
 
-	private String prijmeni;
+    @NonNull
+    private String prijmeni;
 
-	private String funkce;
-
-	public StatutarniOrgan() {
-
-	}
-
-	public String getJmeno() {
-		return jmeno;
-	}
-
-	public void setJmeno(String jmeno) {
-		this.jmeno = jmeno;
-	}
-
-	public String getPrijmeni() {
-		return prijmeni;
-	}
-
-	public void setPrijmeni(String prijmeni) {
-		this.prijmeni = prijmeni;
-	}
-
-	public String getFunkce() {
-		return funkce;
-	}
-
-	public void setFunkce(String funkce) {
-		this.funkce = funkce;
-	}
+    @NonNull
+    private String funkce;
 
 }

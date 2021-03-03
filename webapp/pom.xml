@@ -9,7 +9,6 @@
     </parent>
 
 
-
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>ares-api.webapp</artifactId>
@@ -31,13 +30,16 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-thymeleaf</artifactId>
         </dependency>
-        </dependencies>
+    </dependencies>
 
     <build>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <skip>false</skip>
+                </configuration>
             </plugin>
         </plugins>
     </build>

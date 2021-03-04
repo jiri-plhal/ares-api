@@ -1,12 +1,13 @@
 package com.plhal.ares.webapp.controller;
 
 
-import com.plhal.ares.model.Firma;
+import com.plhal.ares.dbLayer.Firma;
+
 import com.plhal.ares.service.DataService;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 // Controller - řídí celou aplikaci a na základě zadané URL provede potřebné úkony
 @Controller
@@ -42,10 +43,21 @@ public class CompanyController {
             return "nenalezen";
         }
 
+        dataService.pridejFirmu(comp);
+
         // Přidáme firmu do modelu, abychom k tomuto objektu měli přístup v html
         // dokumentu
         model.addAttribute("firma", comp);
 
+
         return "vypis-firmy";
+    }
+
+    @PostMapping("/firmapridana")
+    public String firmaPridana(@ModelAttribute Firma firma, Model model) {
+
+        System.out.println(firma);
+
+        return "firmapridana";
     }
 }

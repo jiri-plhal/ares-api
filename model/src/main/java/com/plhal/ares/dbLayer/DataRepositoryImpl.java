@@ -1,4 +1,4 @@
-package com.plhal.ares.model;
+package com.plhal.ares.dbLayer;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -38,6 +38,7 @@ public class DataRepositoryImpl implements DataRepository {
         // Objekt do kterého budu parsovat XML dokument
         Document doc;
 
+
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         DocumentBuilder builder;
 
@@ -67,7 +68,8 @@ public class DataRepositoryImpl implements DataRepository {
             return null;
         }
 
-        return Firma.builder()
+        Firma firma = Firma.builder()
+                .ico(ico)
                 .clenoveStatutarnihoOrganu(pridejClenyStatutarnihoOrganu(doc))
                 .zakladniKapital(zjistiZakladniKapital(doc))
                 .nazevFirmy(zjistiNazev(doc))
@@ -75,6 +77,12 @@ public class DataRepositoryImpl implements DataRepository {
                 .predmetPodnikani(pridejPredmetyPodnikani(doc))
                 .pravniForma(zjistiPravniFormu(doc))
                 .build();
+
+        for (StatutarniOrgan statOrgan : firma.getClenoveStatutarnihoOrganu()) {
+            statOrgan.setFirma(firma);
+        }
+
+        return firma;
 
     }
 
@@ -117,6 +125,7 @@ public class DataRepositoryImpl implements DataRepository {
 
                 // Přidávám člena statutárního orgánu do firmy
                 listStatutarniOrgan.add(tempSO);
+
             }
 
         }
@@ -188,9 +197,9 @@ public class DataRepositoryImpl implements DataRepository {
     }
 
     // Získávám údaje o předmětech podnikání
-    private @NonNull List<String> pridejPredmetyPodnikani(@NonNull Document doc) {
+    private @NonNull List<PredmetPodnikani> pridejPredmetyPodnikani(@NonNull Document doc) {
 
-        List<String> predmetPodnikani = new ArrayList<>();
+        List<PredmetPodnikani> predmetPodnikani = new ArrayList<>();
 
         // Získávám kolekci předmětů podnikání
         NodeList tempNodeList = doc.getElementsByTagName("dtt:Predmet_podnikani");
@@ -198,12 +207,15 @@ public class DataRepositoryImpl implements DataRepository {
 
         // Testuji, zda firma má předmět podnikání
         if (tempE == null) {
-            predmetPodnikani.add("Neexistuje předmět podnikání");
+            predmetPodnikani.add(PredmetPodnikani.builder().nazev("Neexistuje predmet podnikani").build());
         } else {
             for (int i = 0; i < tempE.getElementsByTagName("dtt:Text").getLength(); i++) {
 
                 // Přidávám předměty podnikání do kolekce
-                predmetPodnikani.add(tempE.getElementsByTagName("dtt:Text").item(i).getTextContent());
+                String s = tempE.getElementsByTagName("dtt:Text").item(i).getTextContent();
+                s = s.replaceAll("(\\n)", "");
+                PredmetPodnikani p = PredmetPodnikani.builder().nazev(s).build();
+                predmetPodnikani.add(p);
             }
         }
         return predmetPodnikani;

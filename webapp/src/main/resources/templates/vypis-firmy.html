@@ -2,62 +2,67 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
-<!-- Required meta tags -->
-<meta charset="utf-8">
-<meta name="viewport"
-	content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-<!-- Bootstrap CSS -->
-<link rel="stylesheet"
-	href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"
-	integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS"
-	crossorigin="anonymous">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet"
+          href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"
+          integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS"
+          crossorigin="anonymous">
 
-<title>Vyhledávání firem</title>
+    <title>Vyhledávání firem</title>
 </head>
 
 <body>
 
-	<div class="container">
-		<br>
-		<h3>Vyhledávání firem</h3>
-		<br> Název firmy:
-		<p class="font-weight-bold" th:text="${firma.nazevFirmy}" />
-		
-		<br> Právní forma:
-		<p class="font-weight-bold" th:text="${firma.pravniForma}" />
+<div class="container">
+    <br>
+    <h3>Vyhledávání firem</h3>
+    <br> Název firmy:
+    <p class="font-weight-bold" th:text="${firma.nazevFirmy}"/>
 
-		<br> Základní kapitál:
-		<p class="font-weight-bold" th:text="${firma.zakladniKapital}" />
-		
-		<br> Sídlo firmy:
-		<p class="font-weight-bold" th:text="${firma.sidlo}" />
-		
-		<br> Předmět podnikání:
-		<li class="font-weight-bold" th:each="predmetPodnikani: ${firma.predmetPodnikani}" th:text="${predmetPodnikani}"></li>
-			<br> Statutární orgány: <br> <br>
-			
-			
-		<table class="table table-bordered table-striped">
-			<thead class="thead-dark">
-				<tr>
-					<th>Funkce</th>
-					<th>Příjmení</th>
-					<th>Jméno</th>
-				</tr>
-			</thead>
+    <br> Právní forma:
+    <p class="font-weight-bold" th:text="${firma.pravniForma}"/>
 
-			<tbody>
-				<tr th:each="temp : ${firma.clenoveStatutarnihoOrganu}">
-					<td th:text="${temp.funkce}" />
-					<td th:text="${temp.prijmeni}" />
-					<td th:text="${temp.jmeno}" />
-				</tr>
-			</tbody>
-		</table>
-		<br> <a href="/">Zpět</a>
+    <br> Základní kapitál:
+    <p class="font-weight-bold" th:text="${firma.zakladniKapital}"/>
 
-	</div>
+    <br> Sídlo firmy:
+    <p class="font-weight-bold" th:text="${firma.sidlo}"/>
+
+    <br> Předmět podnikání:
+    <li class="font-weight-bold" th:each="predmetPodnikani: ${firma.predmetPodnikani}"
+        th:text="${predmetPodnikani.nazev}"></li>
+    <br> Statutární orgány: <br> <br>
+
+
+    <table class="table table-bordered table-striped">
+        <thead class="thead-dark">
+        <tr>
+            <th>Funkce</th>
+            <th>Příjmení</th>
+            <th>Jméno</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        <tr th:each="temp : ${firma.clenoveStatutarnihoOrganu}">
+            <td th:text="${temp.funkce}"/>
+            <td th:text="${temp.prijmeni}"/>
+            <td th:text="${temp.jmeno}"/>
+        </tr>
+        </tbody>
+    </table>
+    <br>
+    <button type="button" class="btn btn-info btn-sm ">Přidej firmu</button>
+    <button type="button" class="btn btn-info btn-sm ">Aktualizuj firmu</button>
+    <br>
+    <br> <a href="/">Zpět</a>
+
+</div>
 
 </body>
 </html>

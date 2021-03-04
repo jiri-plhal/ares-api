@@ -1,6 +1,6 @@
 package com.plhal.ares.webapp;
 
-import com.plhal.ares.model.DataRepositoryProperties;
+import com.plhal.ares.dbLayer.DataRepositoryProperties;
 import lombok.Getter;
 import org.springframework.boot.context.properties.NestedConfigurationProperty;
 

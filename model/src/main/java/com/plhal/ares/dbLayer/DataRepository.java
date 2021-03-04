@@ -1,4 +1,4 @@
-package com.plhal.ares.model;
+package com.plhal.ares.dbLayer;
 
 
 /**

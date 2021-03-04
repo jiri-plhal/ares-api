@@ -1,7 +1,8 @@
 package com.plhal.ares.service;
 
-import com.plhal.ares.model.Firma;
-import com.plhal.ares.model.DataRepository;
+import com.plhal.ares.dbLayer.Firma;
+import com.plhal.ares.dbLayer.DataRepository;
+import com.plhal.ares.dbLayer.FirmaRepository;
 
 /**
  * Concrete implementation for service layer, which contains business logic for communication with model.
@@ -9,10 +10,13 @@ import com.plhal.ares.model.DataRepository;
 
 public class DataServiceImpl implements DataService {
 
-    private final DataRepository dataRepository;
+    private DataRepository dataRepository;
 
-    public DataServiceImpl(DataRepository dataRepository) {
+    private FirmaRepository firmaRepository;
+
+    public DataServiceImpl(DataRepository dataRepository, FirmaRepository firmaRepository) {
         this.dataRepository = dataRepository;
+        this.firmaRepository = firmaRepository;
     }
 
 
@@ -27,4 +31,7 @@ public class DataServiceImpl implements DataService {
         return dataRepository.najdiFirmu(ico);
     }
 
+    public void pridejFirmu(Firma firma) {
+        firmaRepository.save(firma);
+    }
 }

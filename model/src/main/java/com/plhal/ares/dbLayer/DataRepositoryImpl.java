@@ -70,14 +70,13 @@ public class DataRepositoryImpl implements DataRepository {
 
         Firma firma = Firma.builder()
                 .ico(ico)
-                .clenoveStatutarnihoOrganu(pridejClenyStatutarnihoOrganu(doc))
+                .clenoveStatutarnihoOrganu(pridejClenyStatutarnihoOrganu(doc, ico))
                 .zakladniKapital(zjistiZakladniKapital(doc))
                 .nazevFirmy(zjistiNazev(doc))
                 .sidlo(zjistiSidlo(doc))
                 .predmetPodnikani(pridejPredmetyPodnikani(doc))
                 .pravniForma(zjistiPravniFormu(doc))
                 .build();
-
         for (StatutarniOrgan statOrgan : firma.getClenoveStatutarnihoOrganu()) {
             statOrgan.setFirma(firma);
         }
@@ -87,7 +86,7 @@ public class DataRepositoryImpl implements DataRepository {
     }
 
     // Získávám údaje o členech SU
-    private @NonNull List<StatutarniOrgan> pridejClenyStatutarnihoOrganu(@NonNull Document doc) {
+    private @NonNull List<StatutarniOrgan> pridejClenyStatutarnihoOrganu(@NonNull Document doc, String ico) {
 
         List<StatutarniOrgan> listStatutarniOrgan = new ArrayList<>();
 
@@ -119,6 +118,7 @@ public class DataRepositoryImpl implements DataRepository {
 
                 tempSO = StatutarniOrgan.builder()
                         .prijmeni(prijmeni)
+                        .statutarniOrganId(ico + i)
                         .jmeno(jmeno)
                         .funkce(funkce)
                         .build();

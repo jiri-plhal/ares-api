@@ -53,11 +53,4 @@ public class CompanyController {
         return "vypis-firmy";
     }
 
-    @PostMapping("/firmapridana")
-    public String firmaPridana(@ModelAttribute Firma firma, Model model) {
-
-        System.out.println(firma);
-
-        return "firmapridana";
-    }
 }

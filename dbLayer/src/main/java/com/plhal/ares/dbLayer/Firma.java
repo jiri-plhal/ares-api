@@ -24,7 +24,7 @@ public class Firma {
     private String pravniForma;
 
     @NonNull
-    @OneToMany(cascade={CascadeType.ALL}, mappedBy = "firma")
+    @OneToMany(cascade=CascadeType.ALL, mappedBy = "firma")
     private List<StatutarniOrgan> clenoveStatutarnihoOrganu;
 
     @NonNull

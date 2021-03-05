@@ -13,12 +13,11 @@ import javax.persistence.*;
 @Table(name = "statutarni_organ")
 public class StatutarniOrgan {
 
-    @NonNull
     @Id
-    @GeneratedValue(strategy= GenerationType.IDENTITY)
-    private int statutarniOrganId;
+    @NonNull
+    private String statutarniOrganId;
 
-    @ManyToOne(cascade={CascadeType.PERSIST, CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH})
+    @ManyToOne(cascade={CascadeType.PERSIST, CascadeType.DETACH, CascadeType.REFRESH, CascadeType.MERGE})
     @JoinColumn(name="firma_ico")
     private Firma firma;
 

@@ -1,4 +1,4 @@
-package com.plhal.ares.dbLayer;
+package com.plhal.ares.dblayer;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -118,7 +118,6 @@ public class DataRepositoryImpl implements DataRepository {
 
                 tempSO = StatutarniOrgan.builder()
                         .prijmeni(prijmeni)
-                        .statutarniOrganId(ico + i)
                         .jmeno(jmeno)
                         .funkce(funkce)
                         .build();
@@ -206,9 +205,7 @@ public class DataRepositoryImpl implements DataRepository {
         Element tempE = (Element) tempNodeList.item(0);
 
         // Testuji, zda firma má předmět podnikání
-        if (tempE == null) {
-            predmetPodnikani.add(PredmetPodnikani.builder().nazev("Neexistuje predmet podnikani").build());
-        } else {
+        if (tempE != null){
             for (int i = 0; i < tempE.getElementsByTagName("dtt:Text").getLength(); i++) {
 
                 // Přidávám předměty podnikání do kolekce

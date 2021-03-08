@@ -1,4 +1,4 @@
-package com.plhal.ares.dbLayer;
+package com.plhal.ares.dblayer;
 
 import lombok.*;
 
@@ -33,11 +33,12 @@ public class Firma {
     @NonNull
     private String sidlo;
 
-    @NonNull
+
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(name="firma_predmet_podnikani",
             joinColumns = @JoinColumn(name="ico"),
             inverseJoinColumns = @JoinColumn(name="predmet_podnikani_nazev"))
+    @NonNull
     private List<PredmetPodnikani> predmetPodnikani;
 
 }

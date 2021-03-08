@@ -1,10 +1,12 @@
-package com.plhal.ares.dbLayer;
+package com.plhal.ares.dblayer;
 
 import lombok.*;
 
 import javax.persistence.*;
 
-// Třída statutárního orgánu (instance tohoto objektu jsou přidávány do třídy Firma)
+/**
+ *  This class represents statutory authority of company.
+ */
 @Data
 @Builder
 @NoArgsConstructor
@@ -14,7 +16,7 @@ import javax.persistence.*;
 public class StatutarniOrgan {
 
     @Id
-    @NonNull
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private String statutarniOrganId;
 
     @ManyToOne(cascade={CascadeType.PERSIST, CascadeType.DETACH, CascadeType.REFRESH, CascadeType.MERGE})
@@ -29,5 +31,4 @@ public class StatutarniOrgan {
 
     @NonNull
     private String funkce;
-
 }

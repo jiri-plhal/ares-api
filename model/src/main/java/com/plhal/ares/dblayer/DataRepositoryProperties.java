@@ -1,4 +1,4 @@
-package com.plhal.ares.dbLayer;
+package com.plhal.ares.dblayer;
 
 import lombok.Data;
 

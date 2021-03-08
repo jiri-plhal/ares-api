@@ -1,7 +1,7 @@
 package com.plhal.ares.webapp.controller;
 
 
-import com.plhal.ares.dbLayer.Firma;
+import com.plhal.ares.dblayer.Firma;
 
 import com.plhal.ares.service.DataService;
 
@@ -43,7 +43,7 @@ public class CompanyController {
             return "nenalezen";
         }
 
-        dataService.pridejFirmu(comp);
+        dataService.addCompany(comp);
 
         // Přidáme firmu do modelu, abychom k tomuto objektu měli přístup v html
         // dokumentu

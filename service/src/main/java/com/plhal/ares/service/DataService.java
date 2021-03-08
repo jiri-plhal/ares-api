@@ -1,6 +1,6 @@
 package com.plhal.ares.service;
 
-import com.plhal.ares.dbLayer.Firma;
+import com.plhal.ares.dblayer.Firma;
 
 /**
  * Interface for service layer, which contains business logic for communication with model.
@@ -15,6 +15,10 @@ public interface DataService {
      */
     public Firma najdiFirmu(String ico);
 
-    public void pridejFirmu(Firma firma);
+    /**
+     * This method saves company into database.
+     * @param firma Instance of Firma class, which will be save into database.
+     */
+    public void addCompany(Firma firma);
 
 }

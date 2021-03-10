@@ -1,4 +1,4 @@
-package com.plhal.ares.dblayer;
+package com.plhal.ares.parser;
 
 import lombok.*;
 
@@ -12,14 +12,14 @@ import javax.persistence.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "statutarni_organ")
+@Table(name = "statutarni_organ", schema="ares")
 public class StatutarniOrgan {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private String statutarniOrganId;
+    private Integer statutarniOrganId;
 
-    @ManyToOne(cascade={CascadeType.PERSIST, CascadeType.DETACH, CascadeType.REFRESH, CascadeType.MERGE})
+    @ManyToOne(cascade={CascadeType.PERSIST, CascadeType.DETACH, CascadeType.REFRESH})
     @JoinColumn(name="firma_ico")
     private Firma firma;
 

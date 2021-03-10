@@ -1,4 +1,4 @@
-package com.plhal.ares.dblayer;
+package com.plhal.ares.parser;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -8,6 +8,7 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
+import lombok.AllArgsConstructor;
 import lombok.NonNull;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -18,13 +19,11 @@ import org.xml.sax.SAXException;
  * Concrete implementation of class for getting informations about requested company from Czech business register.
  */
 
-public class DataRepositoryImpl implements DataRepository {
+@AllArgsConstructor
+public class ParserRepositoryImpl implements ParserRepository {
 
-    private DataRepositoryProperties dataRepositoryProperties;
-
-    public DataRepositoryImpl(DataRepositoryProperties dataRepositoryProperties) {
-        this.dataRepositoryProperties = dataRepositoryProperties;
-    }
+    @NonNull
+    private final ParserRepositoryProperties parserRepositoryProperties;
 
     /**
      * This method finds informations about company from Czech business register based on Identification number
@@ -38,7 +37,6 @@ public class DataRepositoryImpl implements DataRepository {
         // Objekt do kterého budu parsovat XML dokument
         Document doc;
 
-
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         DocumentBuilder builder;
 
@@ -47,7 +45,7 @@ public class DataRepositoryImpl implements DataRepository {
             builder = factory.newDocumentBuilder();
 
             // Získávám XML dokument z URL adresy
-            doc = builder.parse(dataRepositoryProperties.getUrlPrefix() + ico + dataRepositoryProperties.getUrlSufix());
+            doc = builder.parse(parserRepositoryProperties.getUrlPrefix() + ico + parserRepositoryProperties.getUrlSufix());
 
         } catch (ParserConfigurationException e) {
 
@@ -205,7 +203,7 @@ public class DataRepositoryImpl implements DataRepository {
         Element tempE = (Element) tempNodeList.item(0);
 
         // Testuji, zda firma má předmět podnikání
-        if (tempE != null){
+        if (tempE != null) {
             for (int i = 0; i < tempE.getElementsByTagName("dtt:Text").getLength(); i++) {
 
                 // Přidávám předměty podnikání do kolekce

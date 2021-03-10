@@ -1,10 +1,11 @@
-package com.plhal.ares.dblayer;
+package com.plhal.ares.parser;
 
 
 /**
  * Interface for getting informations about company
  */
-public interface DataRepository {
+
+public interface ParserRepository {
     /**
      * This method finds informations about company from Czech business register.
      *

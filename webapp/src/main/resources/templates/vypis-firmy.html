@@ -57,7 +57,20 @@
         </tbody>
     </table>
     <br>
-    <button type="button" class="btn btn-info btn-sm ">Přidej firmu</button>
+    <form action="#" th:action="@{/firmapridana}"  method="POST" th:object="${firma}">
+        <input type="hidden" th:field="*{nazevFirmy}">
+        <input type="hidden" th:field="*{ico}">
+        <input type="hidden" th:field="*{pravniForma}">
+        <input type="hidden" th:field="*{zakladniKapital}">
+        <input type="hidden" th:field="*{sidlo}">
+        <input type="hidden" th:each="row,rowStat : *{predmetPodnikani}" th:field="*{predmetPodnikani[__${rowStat.index}__].nazev}" />
+        <input type="hidden" th:each="row,rowStat : *{clenoveStatutarnihoOrganu}" th:field="*{clenoveStatutarnihoOrganu[__${rowStat.index}__].funkce}" />
+        <input type="hidden" th:each="row,rowStat : *{clenoveStatutarnihoOrganu}" th:field="*{clenoveStatutarnihoOrganu[__${rowStat.index}__].firma.ico}" />
+        <input type="hidden" th:each="row,rowStat : *{clenoveStatutarnihoOrganu}" th:field="*{clenoveStatutarnihoOrganu[__${rowStat.index}__].jmeno}" />
+        <input type="hidden" th:each="row,rowStat : *{clenoveStatutarnihoOrganu}" th:field="*{clenoveStatutarnihoOrganu[__${rowStat.index}__].prijmeni}" />
+
+        <button type="submit" class="btn btn-info btn-sm ">Přidej firmu</button>
+    </form>
     <button type="button" class="btn btn-info btn-sm ">Aktualizuj firmu</button>
     <br>
     <br> <a href="/">Zpět</a>

@@ -1,8 +1,8 @@
 package com.plhal.ares.service;
 
-import com.plhal.ares.dblayer.Firma;
-import com.plhal.ares.dblayer.DataRepository;
-import com.plhal.ares.dblayer.FirmaRepository;
+import com.plhal.ares.parser.Firma;
+import com.plhal.ares.parser.ParserRepository;
+import com.plhal.ares.parser.FirmaRepository;
 import lombok.AllArgsConstructor;
 import lombok.NonNull;
 
@@ -13,7 +13,7 @@ import lombok.NonNull;
 public class DataServiceImpl implements DataService {
 
     @NonNull
-    private final DataRepository dataRepository;
+    private final ParserRepository dataRepository;
 
     @NonNull
     private final FirmaRepository firmaRepository;
@@ -31,9 +31,20 @@ public class DataServiceImpl implements DataService {
 
     /**
      * This method calls another method to save object into database.
+     *
      * @param company Instance of Firma class, which will be save into database.
      */
     public void addCompany(@NonNull Firma company) {
         firmaRepository.save(company);
+    }
+
+    /**
+     * This method finds company in database based on Ico.
+     *
+     * @param companyIco Ico of requested company
+     * @return True, if requested company is in database.
+     */
+    public boolean findCompanyInDatabase(String companyIco) {
+        return firmaRepository.existsById(companyIco);
     }
 }

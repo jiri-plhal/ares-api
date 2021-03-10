@@ -1,4 +1,4 @@
-package com.plhal.ares.dblayer;
+package com.plhal.ares.parser;
 
 import lombok.*;
 
@@ -10,7 +10,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "predmet_podnikani")
+@Table(name = "predmet_podnikani", schema="ares")
 public class PredmetPodnikani {
 
     @Id

@@ -10,7 +10,7 @@
     </properties>
     <modules>
         <module>webapp</module>
-        <module>model</module>
+        <module>parser</module>
         <module>service</module>
         <module>dbLayer</module>
     </modules>
@@ -87,6 +87,11 @@
                 <configuration>
                     <skip>true</skip>
                 </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.flywaydb</groupId>
+                <artifactId>flyway-maven-plugin</artifactId>
+                <version>7.6.0</version>
             </plugin>
         </plugins>
     </build>

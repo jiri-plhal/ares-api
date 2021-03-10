@@ -1,4 +1,4 @@
-package com.plhal.ares.dblayer;
+package com.plhal.ares.parser;
 
 import lombok.*;
 
@@ -9,7 +9,7 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "firma")
+@Table(name = "firma", schema = "ares")
 @Entity
 public class Firma {
 
@@ -24,7 +24,7 @@ public class Firma {
     private String pravniForma;
 
     @NonNull
-    @OneToMany(cascade=CascadeType.ALL, mappedBy = "firma")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "firma")
     private List<StatutarniOrgan> clenoveStatutarnihoOrganu;
 
     @NonNull
@@ -36,6 +36,7 @@ public class Firma {
 
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(name="firma_predmet_podnikani",
+            schema = "ares",
             joinColumns = @JoinColumn(name="ico"),
             inverseJoinColumns = @JoinColumn(name="predmet_podnikani_nazev"))
     @NonNull

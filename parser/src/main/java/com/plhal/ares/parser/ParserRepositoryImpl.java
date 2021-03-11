@@ -68,7 +68,7 @@ public class ParserRepositoryImpl implements ParserRepository {
 
         Firma firma = Firma.builder()
                 .ico(ico)
-                .clenoveStatutarnihoOrganu(pridejClenyStatutarnihoOrganu(doc, ico))
+                .clenoveStatutarnihoOrganu(pridejClenyStatutarnihoOrganu(doc))
                 .zakladniKapital(zjistiZakladniKapital(doc))
                 .nazevFirmy(zjistiNazev(doc))
                 .sidlo(zjistiSidlo(doc))
@@ -84,7 +84,7 @@ public class ParserRepositoryImpl implements ParserRepository {
     }
 
     // Získávám údaje o členech SU
-    private @NonNull List<StatutarniOrgan> pridejClenyStatutarnihoOrganu(@NonNull Document doc, String ico) {
+    private @NonNull List<StatutarniOrgan> pridejClenyStatutarnihoOrganu(@NonNull Document doc) {
 
         List<StatutarniOrgan> listStatutarniOrgan = new ArrayList<>();
 

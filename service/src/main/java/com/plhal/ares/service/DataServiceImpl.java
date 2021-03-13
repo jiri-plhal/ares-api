@@ -13,7 +13,7 @@ import lombok.NonNull;
 public class DataServiceImpl implements DataService {
 
     @NonNull
-    private final ParserRepository dataRepository;
+    private final ParserRepository parserRepository;
 
     @NonNull
     private final FirmaRepository firmaRepository;
@@ -26,7 +26,7 @@ public class DataServiceImpl implements DataService {
      */
     public Firma najdiFirmu(@NonNull String ico) {
 
-        return dataRepository.najdiFirmu(ico);
+        return parserRepository.najdiFirmu(ico);
     }
 
     /**

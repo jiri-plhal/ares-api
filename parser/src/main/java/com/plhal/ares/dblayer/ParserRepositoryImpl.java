@@ -1,4 +1,4 @@
-package com.plhal.ares.parser;
+package com.plhal.ares.dblayer;
 
 import java.io.IOException;
 import java.util.ArrayList;

@@ -1,6 +1,6 @@
 package com.plhal.ares.webapp;
 
-import com.plhal.ares.parser.*;
+import com.plhal.ares.dblayer.*;
 import com.plhal.ares.service.DataService;
 import com.plhal.ares.service.DataServiceImpl;
 import org.springframework.boot.context.properties.ConfigurationProperties;

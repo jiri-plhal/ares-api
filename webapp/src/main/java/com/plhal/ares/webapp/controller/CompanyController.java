@@ -1,7 +1,7 @@
 package com.plhal.ares.webapp.controller;
 
 
-import com.plhal.ares.parser.Firma;
+import com.plhal.ares.dblayer.Firma;
 
 import com.plhal.ares.service.DataService;
 

@@ -1,6 +1,6 @@
 package com.plhal.ares.service;
 
-import com.plhal.ares.parser.Firma;
+import com.plhal.ares.dblayer.Firma;
 
 /**
  * Interface for service layer, which contains business logic for communication with model.

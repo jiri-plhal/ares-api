@@ -1,3 +1,5 @@
+CREATE SCHEMA IF NOT EXISTS ares;
+
 CREATE TABLE ares.firma (
     ico CHAR(8) PRIMARY KEY,
     nazev_firmy VARCHAR(100) NOT NULL,

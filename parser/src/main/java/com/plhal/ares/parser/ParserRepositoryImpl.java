@@ -13,6 +13,7 @@ import com.plhal.ares.dblayer.PredmetPodnikani;
 import com.plhal.ares.dblayer.StatutarniOrgan;
 import lombok.AllArgsConstructor;
 import lombok.NonNull;
+import lombok.extern.slf4j.Slf4j;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
@@ -22,6 +23,7 @@ import org.xml.sax.SAXException;
  * Concrete implementation of class for getting informations about requested company from Czech business register.
  */
 
+@Slf4j
 @AllArgsConstructor
 public class ParserRepositoryImpl implements ParserRepository {
 
@@ -36,6 +38,8 @@ public class ParserRepositoryImpl implements ParserRepository {
      * @return Object of company with its informations. If company is not found or error happened, return value is null.
      */
     public Firma najdiFirmu(String ico) {
+
+        log.info("Inside method najdiFirmu");
 
         // Objekt do kterého budu parsovat XML dokument
         Document doc;
@@ -52,22 +56,25 @@ public class ParserRepositoryImpl implements ParserRepository {
 
         } catch (ParserConfigurationException e) {
 
-            e.printStackTrace();
+            log.error("***** ParserConfigurationException occured: ", e);
             return null;
         } catch (SAXException e) {
 
-            e.printStackTrace();
+            log.error("***** SAXException occured: ", e);
             return null;
         } catch (IOException e) {
 
-            e.printStackTrace();
+            log.error("***** IOException occured: ", e);
             return null;
         }
 
         // Kontroluji, zda daná firma existuje, pokud ne vracím null
         if (doc.getElementsByTagName("dtt:Error").getLength() > 0) {
+            log.warn("Company with ICO {} was not found!", ico);
             return null;
         }
+
+        log.info("Company with ICO {} was succesfully found. Next is getting informations about company", ico);
 
         Firma firma = Firma.builder()
                 .ico(ico)
@@ -88,6 +95,8 @@ public class ParserRepositoryImpl implements ParserRepository {
 
     // Získávám údaje o členech SU
     private @NonNull List<StatutarniOrgan> pridejClenyStatutarnihoOrganu(@NonNull Document doc) {
+
+        log.info("Trying to find statutory authority");
 
         List<StatutarniOrgan> listStatutarniOrgan = new ArrayList<>();
 
@@ -126,6 +135,8 @@ public class ParserRepositoryImpl implements ParserRepository {
                 // Přidávám člena statutárního orgánu do firmy
                 listStatutarniOrgan.add(tempSO);
 
+            } else {
+                log.warn("Company doesnt have any statutory authority");
             }
 
         }
@@ -134,8 +145,9 @@ public class ParserRepositoryImpl implements ParserRepository {
     }
 
     // Získávám údaje o základním kapitálu společnosti
-    private @NonNull String zjistiZakladniKapital(@NonNull Document doc) {
+    private String zjistiZakladniKapital(@NonNull Document doc) {
 
+        log.info("Trying to find basic deposit");
 
         String zakladniKapital;
 
@@ -143,7 +155,8 @@ public class ParserRepositoryImpl implements ParserRepository {
 
         // Zjišťuji, zda má firma základní kapitál
         if (tempNodeList.item(0) == null) {
-            zakladniKapital = "Tato společnost nemá základní kapitál";
+            log.warn("This company doesnt have any basic deposit");
+            return null;
         } else {
             Element tempE = (Element) tempNodeList.item(0);
 
@@ -162,6 +175,8 @@ public class ParserRepositoryImpl implements ParserRepository {
     // Získávám údaje o názvu společnosti
     private @NonNull String zjistiNazev(@NonNull Document doc) {
 
+        log.info("Trying to find company name");
+
         String nazev;
 
         NodeList tempNodeList = doc.getElementsByTagName("dtt:Obchodni_firma");
@@ -173,6 +188,8 @@ public class ParserRepositoryImpl implements ParserRepository {
 
     // Získávám údaje o sídle společnosti
     private @NonNull String zjistiSidlo(@NonNull Document doc) {
+
+        log.info("Trying to find company address");
 
         NodeList tempNodeList = doc.getElementsByTagName("dtt:Sidlo");
         Element tempE = (Element) tempNodeList.item(0);
@@ -199,6 +216,8 @@ public class ParserRepositoryImpl implements ParserRepository {
     // Získávám údaje o předmětech podnikání
     private @NonNull List<PredmetPodnikani> pridejPredmetyPodnikani(@NonNull Document doc) {
 
+        log.info("Trying to find subjects of business");
+
         List<PredmetPodnikani> predmetPodnikani = new ArrayList<>();
 
         // Získávám kolekci předmětů podnikání
@@ -215,12 +234,16 @@ public class ParserRepositoryImpl implements ParserRepository {
                 PredmetPodnikani p = PredmetPodnikani.builder().nazev(s).build();
                 predmetPodnikani.add(p);
             }
+        } else {
+            log.warn("This company doesnt have any subject of business");
         }
         return predmetPodnikani;
     }
 
     // Získávám údaje o právní formě podnikání
     private @NonNull String zjistiPravniFormu(@NonNull Document doc) {
+
+        log.info("Trying to find legal form");
 
         String pravniForma;
 

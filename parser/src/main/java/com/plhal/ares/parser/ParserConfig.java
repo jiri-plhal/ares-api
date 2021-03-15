@@ -1,4 +1,4 @@
-package com.plhal.ares.dblayer;
+package com.plhal.ares.parser;
 
 import org.springframework.context.annotation.Bean;
 

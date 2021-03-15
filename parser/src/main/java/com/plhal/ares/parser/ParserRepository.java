@@ -1,5 +1,7 @@
-package com.plhal.ares.dblayer;
+package com.plhal.ares.parser;
 
+
+import com.plhal.ares.dblayer.Firma;
 
 /**
  * Interface for getting informations about company

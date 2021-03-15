@@ -1,7 +1,7 @@
 package com.plhal.ares.service;
 
 import com.plhal.ares.dblayer.Firma;
-import com.plhal.ares.dblayer.ParserRepository;
+import com.plhal.ares.parser.ParserRepository;
 import com.plhal.ares.dblayer.FirmaRepository;
 import lombok.AllArgsConstructor;
 import lombok.NonNull;

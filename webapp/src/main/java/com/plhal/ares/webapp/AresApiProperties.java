@@ -1,6 +1,6 @@
 package com.plhal.ares.webapp;
 
-import com.plhal.ares.dblayer.ParserRepositoryProperties;
+import com.plhal.ares.parser.ParserRepositoryProperties;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.springframework.boot.context.properties.NestedConfigurationProperty;

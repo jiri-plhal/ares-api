@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import javax.sql.DataSource;
 import java.util.ArrayList;
 import java.util.Optional;
 
@@ -17,17 +16,14 @@ import java.util.Optional;
  */
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = App.class)
-@AutoConfigureEmbeddedDatabase(beanName = "dataSource")
+@AutoConfigureEmbeddedDatabase
 public class EmbeddedPostgresTest {
 
     private FirmaRepository firmaRepository;
 
-    private DataSource dataSource;
-
     @Autowired
-    public EmbeddedPostgresTest (FirmaRepository firmaRepository, DataSource dataSource) {
+    public EmbeddedPostgresTest (FirmaRepository firmaRepository) {
         this.firmaRepository = firmaRepository;
-        this.dataSource = dataSource;
     }
 
     @Test

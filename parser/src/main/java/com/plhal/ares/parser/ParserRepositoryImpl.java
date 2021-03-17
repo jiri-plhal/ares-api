@@ -1,4 +1,4 @@
-package com.plhal.ares.model;
+package com.plhal.ares.parser;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -8,6 +8,10 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
+import com.plhal.ares.dblayer.Firma;
+import com.plhal.ares.dblayer.PredmetPodnikani;
+import com.plhal.ares.dblayer.StatutarniOrgan;
+import lombok.AllArgsConstructor;
 import lombok.NonNull;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -18,13 +22,11 @@ import org.xml.sax.SAXException;
  * Concrete implementation of class for getting informations about requested company from Czech business register.
  */
 
-public class DataRepositoryImpl implements DataRepository {
+@AllArgsConstructor
+public class ParserRepositoryImpl implements ParserRepository {
 
-    private DataRepositoryProperties dataRepositoryProperties;
-
-    public DataRepositoryImpl(DataRepositoryProperties dataRepositoryProperties) {
-        this.dataRepositoryProperties = dataRepositoryProperties;
-    }
+    @NonNull
+    private final ParserRepositoryProperties parserRepositoryProperties;
 
     /**
      * This method finds informations about company from Czech business register based on Identification number
@@ -46,7 +48,7 @@ public class DataRepositoryImpl implements DataRepository {
             builder = factory.newDocumentBuilder();
 
             // Získávám XML dokument z URL adresy
-            doc = builder.parse(dataRepositoryProperties.getUrlPrefix() + ico + dataRepositoryProperties.getUrlSufix());
+            doc = builder.parse(parserRepositoryProperties.getUrlPrefix() + ico + parserRepositoryProperties.getUrlSufix());
 
         } catch (ParserConfigurationException e) {
 
@@ -67,7 +69,8 @@ public class DataRepositoryImpl implements DataRepository {
             return null;
         }
 
-        return Firma.builder()
+        Firma firma = Firma.builder()
+                .ico(ico)
                 .clenoveStatutarnihoOrganu(pridejClenyStatutarnihoOrganu(doc))
                 .zakladniKapital(zjistiZakladniKapital(doc))
                 .nazevFirmy(zjistiNazev(doc))
@@ -75,6 +78,11 @@ public class DataRepositoryImpl implements DataRepository {
                 .predmetPodnikani(pridejPredmetyPodnikani(doc))
                 .pravniForma(zjistiPravniFormu(doc))
                 .build();
+        for (StatutarniOrgan statOrgan : firma.getClenoveStatutarnihoOrganu()) {
+            statOrgan.setFirma(firma);
+        }
+
+        return firma;
 
     }
 
@@ -117,6 +125,7 @@ public class DataRepositoryImpl implements DataRepository {
 
                 // Přidávám člena statutárního orgánu do firmy
                 listStatutarniOrgan.add(tempSO);
+
             }
 
         }
@@ -188,22 +197,23 @@ public class DataRepositoryImpl implements DataRepository {
     }
 
     // Získávám údaje o předmětech podnikání
-    private @NonNull List<String> pridejPredmetyPodnikani(@NonNull Document doc) {
+    private @NonNull List<PredmetPodnikani> pridejPredmetyPodnikani(@NonNull Document doc) {
 
-        List<String> predmetPodnikani = new ArrayList<>();
+        List<PredmetPodnikani> predmetPodnikani = new ArrayList<>();
 
         // Získávám kolekci předmětů podnikání
         NodeList tempNodeList = doc.getElementsByTagName("dtt:Predmet_podnikani");
         Element tempE = (Element) tempNodeList.item(0);
 
         // Testuji, zda firma má předmět podnikání
-        if (tempE == null) {
-            predmetPodnikani.add("Neexistuje předmět podnikání");
-        } else {
+        if (tempE != null) {
             for (int i = 0; i < tempE.getElementsByTagName("dtt:Text").getLength(); i++) {
 
                 // Přidávám předměty podnikání do kolekce
-                predmetPodnikani.add(tempE.getElementsByTagName("dtt:Text").item(i).getTextContent());
+                String s = tempE.getElementsByTagName("dtt:Text").item(i).getTextContent();
+                s = s.replaceAll("(\\n)", "");
+                PredmetPodnikani p = PredmetPodnikani.builder().nazev(s).build();
+                predmetPodnikani.add(p);
             }
         }
         return predmetPodnikani;

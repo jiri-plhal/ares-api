@@ -1,20 +1,22 @@
 package com.plhal.ares.service;
 
-import com.plhal.ares.model.Firma;
-import com.plhal.ares.model.DataRepository;
+import com.plhal.ares.dblayer.Firma;
+import com.plhal.ares.parser.ParserRepository;
+import com.plhal.ares.dblayer.FirmaRepository;
+import lombok.AllArgsConstructor;
+import lombok.NonNull;
 
 /**
  * Concrete implementation for service layer, which contains business logic for communication with model.
  */
-
+@AllArgsConstructor
 public class DataServiceImpl implements DataService {
 
-    private final DataRepository dataRepository;
+    @NonNull
+    private final ParserRepository parserRepository;
 
-    public DataServiceImpl(DataRepository dataRepository) {
-        this.dataRepository = dataRepository;
-    }
-
+    @NonNull
+    private final FirmaRepository firmaRepository;
 
     /**
      * This method delegates finding company informations to model.
@@ -22,9 +24,27 @@ public class DataServiceImpl implements DataService {
      * @param ico Identification number of company.
      * @return Object of company with its informations. If company is not found or error happened, return value is null.
      */
-    public Firma najdiFirmu(String ico) {
+    public Firma najdiFirmu(@NonNull String ico) {
 
-        return dataRepository.najdiFirmu(ico);
+        return parserRepository.najdiFirmu(ico);
     }
 
+    /**
+     * This method calls another method to save object into database.
+     *
+     * @param company Instance of Firma class, which will be save into database.
+     */
+    public void addCompany(@NonNull Firma company) {
+        firmaRepository.save(company);
+    }
+
+    /**
+     * This method finds company in database based on Ico.
+     *
+     * @param companyIco Ico of requested company
+     * @return True, if requested company is in database.
+     */
+    public boolean findCompanyInDatabase(String companyIco) {
+        return firmaRepository.existsById(companyIco);
+    }
 }

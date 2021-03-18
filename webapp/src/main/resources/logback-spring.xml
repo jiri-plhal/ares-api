@@ -1,15 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
 
-    <appender name="FILE-ALL" class="ch.qos.logback.core.FileAppender">
-        <file>ares-api-log-all.log</file>
+    <property name = "PATH" value="${user.home}/logs/" />
+
+    <appender name="FILE-ALL" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${PATH}ares-api-log-all.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${PATH}ares-api-log-all-%d.gz</fileNamePattern>
+        </rollingPolicy>
         <encoder>
             <pattern>%date %level [%thread] %logger{10} [%file:%line] %msg%n</pattern>
         </encoder>
     </appender>
 
-    <appender name="FILE-ERROR" class="ch.qos.logback.core.FileAppender">
-        <file>ares-api-log-errors.log</file>
+    <appender name="FILE-ERROR" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${PATH}ares-api-log-errors.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${PATH}ares-api-log-errors-%d.gz</fileNamePattern>
+        </rollingPolicy>
         <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
             <level>ERROR</level>
         </filter>

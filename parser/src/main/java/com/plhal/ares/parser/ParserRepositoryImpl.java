@@ -54,17 +54,9 @@ public class ParserRepositoryImpl implements ParserRepository {
             // Získávám XML dokument z URL adresy
             doc = builder.parse(parserRepositoryProperties.getUrlPrefix() + ico + parserRepositoryProperties.getUrlSufix());
 
-        } catch (ParserConfigurationException e) {
+        } catch (ParserConfigurationException | SAXException | IOException e) {
 
-            log.error("***** ParserConfigurationException occured: ", e);
-            return null;
-        } catch (SAXException e) {
-
-            log.error("***** SAXException occured: ", e);
-            return null;
-        } catch (IOException e) {
-
-            log.error("***** IOException occured: ", e);
+            log.warn("***** Exception occured: ", e);
             return null;
         }
 

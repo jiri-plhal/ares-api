@@ -5,6 +5,7 @@ import com.plhal.ares.dblayer.Firma;
 
 import com.plhal.ares.service.DataService;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 /**
  * Controller of this application. This class sets mapping to requested urls.
  */
+@Slf4j
 @Controller
 public class CompanyController {
 
@@ -28,6 +30,7 @@ public class CompanyController {
      */
     @GetMapping("/")
     public String uvodniStranka() {
+        log.info("User is on homepage");
 
         return "uvod";
     }
@@ -57,6 +60,7 @@ public class CompanyController {
         // dokumentu
         model.addAttribute("firma", comp);
 
+        log.info("Showing info about company with ICO {}", icoFirmy);
 
         return "vypis-firmy";
     }
@@ -70,11 +74,15 @@ public class CompanyController {
      */
     @PostMapping("/firmapridana")
     public String companyAdd(@ModelAttribute("firma") Firma firma, Model model) {
+        log.info("Trying to save company with ICO {} into database", firma.getIco());
         if (dataService.findCompanyInDatabase(firma.getIco())) {
+            log.info("Company with ICO {} is already is database", firma.getIco());
             model.addAttribute("inDatabase", true);
         } else {
+            log.info("Company with ICO {} is not in database", firma.getIco());
             dataService.addCompany(firma);
             model.addAttribute("inDatabase", false);
+            log.info("Company with ICO {} was just added to database!", firma.getIco());
         }
         return "firma-pridana";
     }

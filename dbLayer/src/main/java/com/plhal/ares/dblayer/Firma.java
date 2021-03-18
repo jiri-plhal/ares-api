@@ -27,12 +27,10 @@ public class Firma {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "firma")
     private List<StatutarniOrgan> clenoveStatutarnihoOrganu;
 
-    @NonNull
     private String zakladniKapital;
 
     @NonNull
     private String sidlo;
-
 
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(name="firma_predmet_podnikani",

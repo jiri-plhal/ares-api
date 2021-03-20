@@ -7,6 +7,9 @@ import lombok.AllArgsConstructor;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Concrete implementation for service layer, which contains business logic for communication with model.
  */
@@ -35,20 +38,55 @@ public class DataServiceImpl implements DataService {
      * This method calls another method to save object into database.
      *
      * @param company Instance of Firma class, which will be save into database.
+     * @return Firma object which was saved into database.
      */
-    public void addCompany(@NonNull Firma company) {
+    public Firma saveCompanyInDatabase(@NonNull Firma company) {
         log.info("Saving company wih ICO {} into database", company.getIco());
-        firmaRepository.save(company);
+        return firmaRepository.save(company);
     }
 
     /**
-     * This method finds company in database based on Ico.
+     * This method finds out, if a company is in database
      *
      * @param companyIco Ico of requested company
      * @return True, if requested company is in database.
      */
-    public boolean findCompanyInDatabase(String companyIco) {
-        log.info("Searching company with ICO {} in database", companyIco);
+    public boolean isCompanyInDatabase(@NonNull String companyIco) {
+        log.info("Is company with ICO {} in database?", companyIco);
         return firmaRepository.existsById(companyIco);
+
+    }
+
+    /**
+     * This method finds a company in database based on Ico.
+     *
+     * @param companyIco Ico of requested company.
+     * @return Requested Firma object. If company is not found, it will return null.
+     */
+    public Firma findCompanyInDatabase(@NonNull String companyIco) {
+        log.info("Searching company with ICO {} in database", companyIco);
+        return firmaRepository.findById(companyIco).get();
+    }
+
+    /**
+     * This method returns all companies in database.
+     *
+     * @return List<Firma> of all companies in database. If no company is present in database, null will be returned.
+     */
+    public List<Firma> showCompaniesInDatabase() {
+        log.info("Showing all companies in database");
+        List<Firma> allCompanies = new ArrayList<>();
+        firmaRepository.findAll().forEach(allCompanies::add);
+        return allCompanies;
+    }
+
+    /**
+     * This method delete company from database.
+     *
+     * @param ico ICO of company, that we want to delete.
+     */
+    public void deleteCompany(@NonNull String ico) {
+        log.info("Deleting company with ico {} from database", ico);
+        firmaRepository.delete(findCompanyInDatabase(ico));
     }
 }

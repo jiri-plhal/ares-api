@@ -1,5 +1,6 @@
 package com.plhal.ares.dblayer;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 
 import javax.persistence.*;
@@ -25,6 +26,7 @@ public class Firma {
 
     @NonNull
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "firma")
+    @JsonManagedReference
     private List<StatutarniOrgan> clenoveStatutarnihoOrganu;
 
     private String zakladniKapital;
@@ -32,7 +34,7 @@ public class Firma {
     @NonNull
     private String sidlo;
 
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     @JoinTable(name="firma_predmet_podnikani",
             schema = "ares",
             joinColumns = @JoinColumn(name="ico"),

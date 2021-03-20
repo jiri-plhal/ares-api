@@ -75,12 +75,12 @@ public class CompanyController {
     @PostMapping("/firmapridana")
     public String companyAdd(@ModelAttribute("firma") Firma firma, Model model) {
         log.info("Trying to save company with ICO {} into database", firma.getIco());
-        if (dataService.findCompanyInDatabase(firma.getIco())) {
+        if (dataService.isCompanyInDatabase(firma.getIco())) {
             log.info("Company with ICO {} is already is database", firma.getIco());
             model.addAttribute("inDatabase", true);
         } else {
             log.info("Company with ICO {} is not in database", firma.getIco());
-            dataService.addCompany(firma);
+            dataService.saveCompanyInDatabase(firma);
             model.addAttribute("inDatabase", false);
             log.info("Company with ICO {} was just added to database!", firma.getIco());
         }

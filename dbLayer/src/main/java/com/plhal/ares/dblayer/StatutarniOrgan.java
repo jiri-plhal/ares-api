@@ -1,5 +1,6 @@
 package com.plhal.ares.dblayer;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.*;
 
 import javax.persistence.*;
@@ -21,6 +22,7 @@ public class StatutarniOrgan {
 
     @ManyToOne(cascade={CascadeType.PERSIST, CascadeType.DETACH, CascadeType.REFRESH})
     @JoinColumn(name="firma_ico")
+    @JsonBackReference
     private Firma firma;
 
     @NonNull

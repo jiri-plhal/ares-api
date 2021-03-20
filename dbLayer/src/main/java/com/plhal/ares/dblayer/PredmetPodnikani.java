@@ -1,5 +1,6 @@
 package com.plhal.ares.dblayer;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.*;
 
 import javax.persistence.*;
@@ -18,6 +19,7 @@ public class PredmetPodnikani {
     private String nazev;
 
     @ManyToMany(mappedBy = "predmetPodnikani")
+    @JsonBackReference
     private List<Firma> seznamFirem;
 
 }

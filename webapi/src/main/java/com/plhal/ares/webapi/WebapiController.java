@@ -19,7 +19,7 @@ import java.util.List;
 @RequestMapping("/api/companies/")
 public class WebapiController {
 
-    DataService dataService;
+    private final DataService dataService;
 
     /**
      * Mapping for getting requested company from database. GET method is use.
@@ -87,7 +87,7 @@ public class WebapiController {
      * Mapping for updating company in database. Only existing company can be updated.
      *
      * @param ico     ICO of company that we want to update.
-     * @param company If company is in database, the new Firma object will be returned. If company is not found in database 404 status code will be returned. If ICO of updating company and ICO in Firma object in body doesnt match 409 status code will be returned.
+     * @param company If company is in database, the new Fima object will be returned. If company is not found in database 404 status code will be returned. If ICO of updating company and ICO in Firma object in body doesnt match 409 status code will be returned.
      * @return
      */
     @PutMapping("{ico}")

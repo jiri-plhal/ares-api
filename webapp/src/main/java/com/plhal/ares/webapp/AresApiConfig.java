@@ -1,31 +1,45 @@
 package com.plhal.ares.webapp;
 
-import com.plhal.ares.dblayer.*;
-import com.plhal.ares.parser.ParserConfig;
-import com.plhal.ares.parser.ParserRepository;
-import com.plhal.ares.parser.ParserRepositoryProperties;
-import com.plhal.ares.service.DataService;
-import com.plhal.ares.service.DataServiceImpl;
+import io.swagger.client.ApiClient;
+import io.swagger.client.api.WebapiControllerApi;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
 
+/**
+ * Configuration class for webapp module.
+ */
 @Configuration
-@Import({DbConfig.class, ParserConfig.class})
 public class AresApiConfig {
 
+    /**
+     * Bean for setting ApiClient to webapi microservice
+     * @param webapiProperties Object which contains url for connection to webapi microservice
+     * @return Object of ApiClient
+     */
     @Bean
-    public DataService dataService(ParserRepository dataRepository, FirmaRepository firmaRepository) {
-
-        return new DataServiceImpl(dataRepository, firmaRepository);
-
+    public ApiClient apiClient(WebapiProperties webapiProperties) {
+        return new ApiClient().setBasePath(webapiProperties.getUrl());
     }
 
+    /**
+     * Bean for comunicating with webapi microservice using generating code frow swagger
+     * @param apiClient ApiClient fot particular microservice
+     * @return Object of WebapiControllerApi
+     */
     @Bean
-    @ConfigurationProperties("ares-api-properties")
-    public AresApiProperties aresApiProperties(ParserRepositoryProperties dataRepositoryProperties) {
-        return new AresApiProperties(dataRepositoryProperties);
+    public WebapiControllerApi webapiControllerApi(ApiClient apiClient) {
+        return new WebapiControllerApi(apiClient);
+    }
+
+    /**
+     * Bean for webapi microservice properties
+     * @return Object of webapi properties
+     */
+    @Bean
+    @ConfigurationProperties("webapi")
+    public WebapiProperties webapiProperties() {
+        return new WebapiProperties();
     }
 
 }

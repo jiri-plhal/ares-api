@@ -1,0 +1,341 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "description": "Api Documentation",
+    "version": "1.0",
+    "title": "Api Documentation",
+    "termsOfService": "urn:tos",
+    "contact": {},
+    "license": {
+      "name": "Apache 2.0",
+      "url": "http://www.apache.org/licenses/LICENSE-2.0"
+    }
+  },
+  "host": "localhost:8081",
+  "basePath": "/",
+  "tags": [
+    {
+      "name": "webapi-controller",
+      "description": "Webapi Controller"
+    }
+  ],
+  "paths": {
+    "/api/companies/": {
+      "get": {
+        "tags": [
+          "webapi-controller"
+        ],
+        "summary": "getCompanies",
+        "operationId": "getCompaniesUsingGET",
+        "produces": [
+          "*/*"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Firma"
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "deprecated": false
+      },
+      "post": {
+        "tags": [
+          "webapi-controller"
+        ],
+        "summary": "saveCompany",
+        "operationId": "saveCompanyUsingPOST",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "*/*"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "company",
+            "description": "company",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Firma"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/Firma"
+            }
+          },
+          "201": {
+            "description": "Created"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/api/companies/fromregister/{ico}": {
+      "get": {
+        "tags": [
+          "webapi-controller"
+        ],
+        "summary": "getCompanyFromRegister",
+        "operationId": "getCompanyFromRegisterUsingGET",
+        "produces": [
+          "*/*"
+        ],
+        "parameters": [
+          {
+            "name": "ico",
+            "in": "path",
+            "description": "ico",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/Firma"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/api/companies/{ico}": {
+      "get": {
+        "tags": [
+          "webapi-controller"
+        ],
+        "summary": "getCompany",
+        "operationId": "getCompanyUsingGET",
+        "produces": [
+          "*/*"
+        ],
+        "parameters": [
+          {
+            "name": "ico",
+            "in": "path",
+            "description": "ico",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/Firma"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "deprecated": false
+      },
+      "put": {
+        "tags": [
+          "webapi-controller"
+        ],
+        "summary": "updateCompany",
+        "operationId": "updateCompanyUsingPUT",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "*/*"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "company",
+            "description": "company",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Firma"
+            }
+          },
+          {
+            "name": "ico",
+            "in": "path",
+            "description": "ico",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/Firma"
+            }
+          },
+          "201": {
+            "description": "Created"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "deprecated": false
+      },
+      "delete": {
+        "tags": [
+          "webapi-controller"
+        ],
+        "summary": "deleteCompany",
+        "operationId": "deleteCompanyUsingDELETE",
+        "produces": [
+          "*/*"
+        ],
+        "parameters": [
+          {
+            "name": "ico",
+            "in": "path",
+            "description": "ico",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/Firma"
+            }
+          },
+          "204": {
+            "description": "No Content"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          }
+        },
+        "deprecated": false
+      }
+    }
+  },
+  "definitions": {
+    "Firma": {
+      "type": "object",
+      "properties": {
+        "clenoveStatutarnihoOrganu": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/StatutarniOrgan"
+          }
+        },
+        "ico": {
+          "type": "string"
+        },
+        "nazevFirmy": {
+          "type": "string"
+        },
+        "pravniForma": {
+          "type": "string"
+        },
+        "predmetPodnikani": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/PredmetPodnikani"
+          }
+        },
+        "sidlo": {
+          "type": "string"
+        },
+        "zakladniKapital": {
+          "type": "string"
+        }
+      },
+      "title": "Firma"
+    },
+    "PredmetPodnikani": {
+      "type": "object",
+      "properties": {
+        "nazev": {
+          "type": "string"
+        },
+        "seznamFirem": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Firma"
+          }
+        }
+      },
+      "title": "PredmetPodnikani"
+    },
+    "StatutarniOrgan": {
+      "type": "object",
+      "properties": {
+        "firma": {
+          "$ref": "#/definitions/Firma"
+        },
+        "funkce": {
+          "type": "string"
+        },
+        "jmeno": {
+          "type": "string"
+        },
+        "prijmeni": {
+          "type": "string"
+        },
+        "statutarniOrganId": {
+          "type": "integer",
+          "format": "int32"
+        }
+      },
+      "title": "StatutarniOrgan"
+    }
+  }
+}

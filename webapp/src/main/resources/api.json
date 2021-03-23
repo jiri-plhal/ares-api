@@ -19,6 +19,15 @@
       "description": "Webapi Controller"
     }
   ],
+  "securityDefinitions": {
+    "basicAuth":{
+      "type": "basic"
+    }
+  },
+  "security": [
+    {
+      "basicAuth": []
+    }],
   "paths": {
     "/api/companies/": {
       "get": {

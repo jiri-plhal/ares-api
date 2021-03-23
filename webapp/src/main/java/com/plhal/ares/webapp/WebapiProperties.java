@@ -9,4 +9,6 @@ import lombok.Data;
 public class WebapiProperties {
 
     private String url;
+    private String username;
+    private String password;
 }

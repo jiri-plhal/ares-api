@@ -14,16 +14,22 @@ public class AresApiConfig {
 
     /**
      * Bean for setting ApiClient to webapi microservice
+     *
      * @param webapiProperties Object which contains url for connection to webapi microservice
      * @return Object of ApiClient
      */
     @Bean
     public ApiClient apiClient(WebapiProperties webapiProperties) {
-        return new ApiClient().setBasePath(webapiProperties.getUrl());
+        ApiClient apiClient = new ApiClient().setBasePath(webapiProperties.getUrl());
+        apiClient.setUsername(webapiProperties.getUsername());
+        apiClient.setPassword(webapiProperties.getPassword());
+
+        return apiClient;
     }
 
     /**
      * Bean for comunicating with webapi microservice using generating code frow swagger
+     *
      * @param apiClient ApiClient fot particular microservice
      * @return Object of WebapiControllerApi
      */
@@ -34,6 +40,7 @@ public class AresApiConfig {
 
     /**
      * Bean for webapi microservice properties
+     *
      * @return Object of webapi properties
      */
     @Bean

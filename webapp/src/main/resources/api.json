@@ -45,7 +45,7 @@
             "schema": {
               "type": "array",
               "items": {
-                "$ref": "#/definitions/Firma"
+                "$ref": "#/definitions/FirmaService"
               }
             }
           },
@@ -80,7 +80,7 @@
             "description": "company",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/Firma"
+              "$ref": "#/definitions/FirmaService"
             }
           }
         ],
@@ -88,7 +88,7 @@
           "200": {
             "description": "OK",
             "schema": {
-              "$ref": "#/definitions/Firma"
+              "$ref": "#/definitions/FirmaService"
             }
           },
           "201": {
@@ -130,7 +130,7 @@
           "200": {
             "description": "OK",
             "schema": {
-              "$ref": "#/definitions/Firma"
+              "$ref": "#/definitions/FirmaService"
             }
           },
           "401": {
@@ -169,7 +169,7 @@
           "200": {
             "description": "OK",
             "schema": {
-              "$ref": "#/definitions/Firma"
+              "$ref": "#/definitions/FirmaService"
             }
           },
           "401": {
@@ -203,7 +203,7 @@
             "description": "company",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/Firma"
+              "$ref": "#/definitions/FirmaService"
             }
           },
           {
@@ -218,7 +218,7 @@
           "200": {
             "description": "OK",
             "schema": {
-              "$ref": "#/definitions/Firma"
+              "$ref": "#/definitions/FirmaService"
             }
           },
           "201": {
@@ -258,7 +258,7 @@
           "200": {
             "description": "OK",
             "schema": {
-              "$ref": "#/definitions/Firma"
+              "$ref": "#/definitions/FirmaService"
             }
           },
           "204": {
@@ -276,13 +276,13 @@
     }
   },
   "definitions": {
-    "Firma": {
+    "FirmaService": {
       "type": "object",
       "properties": {
-        "clenoveStatutarnihoOrganu": {
+        "clenoveStatutarnihoOrganuService": {
           "type": "array",
           "items": {
-            "$ref": "#/definitions/StatutarniOrgan"
+            "$ref": "#/definitions/StatutarniOrganService"
           }
         },
         "ico": {
@@ -294,10 +294,10 @@
         "pravniForma": {
           "type": "string"
         },
-        "predmetPodnikani": {
+        "predmetPodnikaniService": {
           "type": "array",
           "items": {
-            "$ref": "#/definitions/PredmetPodnikani"
+            "$ref": "#/definitions/PredmetPodnikaniService"
           }
         },
         "sidlo": {
@@ -307,28 +307,25 @@
           "type": "string"
         }
       },
-      "title": "Firma"
+      "title": "FirmaService"
     },
-    "PredmetPodnikani": {
+    "PredmetPodnikaniService": {
       "type": "object",
       "properties": {
+        "firmaService": {
+          "$ref": "#/definitions/FirmaService"
+        },
         "nazev": {
           "type": "string"
-        },
-        "seznamFirem": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/Firma"
-          }
         }
       },
-      "title": "PredmetPodnikani"
+      "title": "PredmetPodnikaniService"
     },
-    "StatutarniOrgan": {
+    "StatutarniOrganService": {
       "type": "object",
       "properties": {
-        "firma": {
-          "$ref": "#/definitions/Firma"
+        "firmaService": {
+          "$ref": "#/definitions/FirmaService"
         },
         "funkce": {
           "type": "string"
@@ -338,13 +335,9 @@
         },
         "prijmeni": {
           "type": "string"
-        },
-        "statutarniOrganId": {
-          "type": "integer",
-          "format": "int32"
         }
       },
-      "title": "StatutarniOrgan"
+      "title": "StatutarniOrganService"
     }
   }
 }

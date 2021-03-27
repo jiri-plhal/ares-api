@@ -1,6 +1,5 @@
 package com.plhal.ares.dblayer;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 
 import javax.persistence.*;
@@ -26,7 +25,6 @@ public class Firma {
 
     @NonNull
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "firma")
-    @JsonManagedReference
     private List<StatutarniOrgan> clenoveStatutarnihoOrganu;
 
     private String zakladniKapital;

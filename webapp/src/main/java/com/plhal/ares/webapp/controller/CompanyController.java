@@ -2,7 +2,7 @@ package com.plhal.ares.webapp.controller;
 
 import io.swagger.client.ApiException;
 import io.swagger.client.api.WebapiControllerApi;
-import io.swagger.client.model.Firma;
+import io.swagger.client.model.FirmaService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -44,7 +44,7 @@ public class CompanyController {
     public String company(@RequestParam("icoFirmy") String icoFirmy, Model model) {
 
         log.info("Inside mapping /hledej");
-        Firma comp;
+        FirmaService comp;
 
         try {
             comp = webapiControllerApi.getCompanyFromRegisterUsingGET(icoFirmy);
@@ -55,7 +55,7 @@ public class CompanyController {
 
         // Přidáme firmu do modelu, abychom k tomuto objektu měli přístup v html
         // dokumentu
-        model.addAttribute("firma", comp);
+        model.addAttribute("firmaService", comp);
 
         log.info("Showing info about company with ICO {}", icoFirmy);
 
@@ -67,17 +67,17 @@ public class CompanyController {
      *
      * @param firma Our company object which will be save into database. This object is getting from post method.
      * @param model Into this parameter we will save if the company was successfully saved into database (true or false) and we will put it into template.
-     * @return It returns template - "firma-pridana.html"
+     * @return It returns template - "firmaService-pridana.html"
      */
     @PostMapping("/firmapridana")
-    public String companyAdd(@ModelAttribute("firma") Firma firma, Model model) {
+    public String companyAdd(@ModelAttribute("firma") FirmaService firma, Model model) {
 
         log.info("Trying to save company with ICO {} into database", firma.getIco());
 
         try {
-            Firma company = webapiControllerApi.saveCompanyUsingPOST(firma);
+            FirmaService company = webapiControllerApi.saveCompanyUsingPOST(firma);
             model.addAttribute("inDatabase", false);
-            log.info("Company with ICO {} was just added to database!", firma.getIco());
+            log.info("Company with ICO {} was just added to database!", company.getIco());
         } catch (ApiException e) {
             log.warn("API Exception occured. HTTP status code: {}", e.getCode());
             log.warn("Company with ICO {} is already is database", firma.getIco());

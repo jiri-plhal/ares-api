@@ -29,20 +29,32 @@ public class DataServiceImpl implements DataService {
      * @param ico Identification number of company.
      * @return Object of company with its informations. If company is not found or error happened, return value is null.
      */
-    public Firma najdiFirmu(@NonNull String ico) {
+    public FirmaService najdiFirmu(@NonNull String ico) {
         log.info("Looking for company wih ICO {} in Czech business register", ico);
-        return parserRepository.najdiFirmu(ico);
+
+        Firma firma = parserRepository.najdiFirmu(ico);
+
+        if (firma == null) {
+            return null;
+        } else {
+            return FirmaConvertor.fromDbmodelToService(firma);
+        }
     }
 
     /**
      * This method calls another method to save object into database.
      *
-     * @param company Instance of Firma class, which will be save into database.
+     * @param companyService Instance of Firma class, which will be save into database.
      * @return Firma object which was saved into database.
      */
-    public Firma saveCompanyInDatabase(@NonNull Firma company) {
-        log.info("Saving company wih ICO {} into database", company.getIco());
-        return firmaRepository.save(company);
+    public FirmaService saveCompanyInDatabase(@NonNull FirmaService companyService) {
+        log.info("Saving company wih ICO {} into database", companyService.getIco());
+
+        Firma company = FirmaConvertor.fromServiceToDbmodel(companyService);
+
+        firmaRepository.save(company);
+
+        return FirmaConvertor.fromDbmodelToService(company);
     }
 
     /**
@@ -63,9 +75,10 @@ public class DataServiceImpl implements DataService {
      * @param companyIco Ico of requested company.
      * @return Requested Firma object. If company is not found, it will return null.
      */
-    public Firma findCompanyInDatabase(@NonNull String companyIco) {
+    public FirmaService findCompanyInDatabase(@NonNull String companyIco) {
         log.info("Searching company with ICO {} in database", companyIco);
-        return firmaRepository.findById(companyIco).get();
+
+        return FirmaConvertor.fromDbmodelToService(firmaRepository.findById(companyIco).get());
     }
 
     /**
@@ -73,10 +86,10 @@ public class DataServiceImpl implements DataService {
      *
      * @return List<Firma> of all companies in database. If no company is present in database, null will be returned.
      */
-    public List<Firma> showCompaniesInDatabase() {
+    public List<FirmaService> showCompaniesInDatabase() {
         log.info("Showing all companies in database");
-        List<Firma> allCompanies = new ArrayList<>();
-        firmaRepository.findAll().forEach(allCompanies::add);
+        List<FirmaService> allCompanies = new ArrayList<>();
+        firmaRepository.findAll().forEach(x -> allCompanies.add(FirmaConvertor.fromDbmodelToService(x)));
         return allCompanies;
     }
 
@@ -87,6 +100,6 @@ public class DataServiceImpl implements DataService {
      */
     public void deleteCompany(@NonNull String ico) {
         log.info("Deleting company with ico {} from database", ico);
-        firmaRepository.delete(findCompanyInDatabase(ico));
+        firmaRepository.deleteById(ico);
     }
 }

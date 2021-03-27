@@ -1,7 +1,7 @@
 package com.plhal.ares.webapi;
 
-import com.plhal.ares.dblayer.Firma;
 import com.plhal.ares.service.DataService;
+import com.plhal.ares.service.FirmaService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -28,7 +28,7 @@ public class WebapiController {
      * @return If company is found in database, it will return that company. Otherwise return 404 status code.
      */
     @GetMapping("{ico}")
-    public ResponseEntity<Firma> getCompany(@PathVariable String ico) {
+    public ResponseEntity<FirmaService> getCompany(@PathVariable String ico) {
         log.info("In RestController - getting informations about company with ico {}", ico);
         if (dataService.isCompanyInDatabase(ico)) {
             log.info("Company with ico {} is in database", ico);
@@ -45,7 +45,7 @@ public class WebapiController {
      * @return If the saving is succesfull, it will return Firma object together with status code 200. If company is in database, 409 status code will be returned.
      */
     @PostMapping
-    public ResponseEntity<Firma> saveCompany(@RequestBody Firma company) {
+    public ResponseEntity<FirmaService> saveCompany(@RequestBody FirmaService company) {
         log.info("In RestController - trying to save company with ico {} into database", company.getIco());
         if (dataService.isCompanyInDatabase(company.getIco())) {
             log.warn("Company is already in database, it is not possible to save it again.");
@@ -61,7 +61,7 @@ public class WebapiController {
      * @return Collection of all companies in database. If no companies are in database, null will be returned.
      */
     @GetMapping
-    public ResponseEntity<List<Firma>> getCompanies() {
+    public ResponseEntity<List<FirmaService>> getCompanies() {
         log.info("In RestController - Showing all companies in database");
         return new ResponseEntity<>(dataService.showCompaniesInDatabase(), HttpStatus.OK);
     }
@@ -73,7 +73,7 @@ public class WebapiController {
      * @return If company is found in database status code 200 will be returned. Otherwise 404 status code will be returned.
      */
     @DeleteMapping("{ico}")
-    public ResponseEntity<Firma> deleteCompany(@PathVariable String ico) {
+    public ResponseEntity<FirmaService> deleteCompany(@PathVariable String ico) {
         log.info("In RestController - Trying to delete company with ico {} from database", ico);
         if (dataService.isCompanyInDatabase(ico)) {
             dataService.deleteCompany(ico);
@@ -91,7 +91,7 @@ public class WebapiController {
      * @return
      */
     @PutMapping("{ico}")
-    public ResponseEntity<Firma> updateCompany(@PathVariable String ico, @RequestBody Firma company) {
+    public ResponseEntity<FirmaService> updateCompany(@PathVariable String ico, @RequestBody FirmaService company) {
         log.info("In RestController - Trying to update company with ico {} in database", ico);
         if (!dataService.isCompanyInDatabase(ico)) {
             log.warn("Company is not in database, cant update non-existing company");
@@ -112,9 +112,9 @@ public class WebapiController {
      * @return If company is succesfully found in register it will return Firma object together with status code 200. 404 Status code will be returned in case, that requested company is not present in Czech register.
      */
     @GetMapping("fromregister/{ico}")
-    public ResponseEntity<Firma> getCompanyFromRegister(@PathVariable String ico) {
+    public ResponseEntity<FirmaService> getCompanyFromRegister(@PathVariable String ico) {
         log.info("In RestController - trying to get informations about company with ico {} from register", ico);
-        Firma companyFromRegister = dataService.najdiFirmu(ico);
+        FirmaService companyFromRegister = dataService.najdiFirmu(ico);
         if (companyFromRegister == null) {
             log.warn("Company was not found in Czech business register!");
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);

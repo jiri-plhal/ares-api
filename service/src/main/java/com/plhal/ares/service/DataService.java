@@ -1,7 +1,5 @@
 package com.plhal.ares.service;
 
-import com.plhal.ares.dblayer.Firma;
-
 import java.util.List;
 
 /**
@@ -15,7 +13,7 @@ public interface DataService {
      * @param ico Identification number of company.
      * @return Object of company with its informations. If company is not found or error happened, return value is null.
      */
-    public Firma najdiFirmu(String ico);
+    public FirmaService najdiFirmu(String ico);
 
     /**
      * This method saves company into database.
@@ -23,7 +21,7 @@ public interface DataService {
      * @param firma Instance of Firma class, which will be save into database.
      * @return Firma object which was saved into database.
      */
-    public Firma saveCompanyInDatabase(Firma firma);
+    public FirmaService saveCompanyInDatabase(FirmaService firma);
 
     /**
      * This method finds out, if a company is in database
@@ -39,7 +37,7 @@ public interface DataService {
      * @param companyIco Ico of requested company.
      * @return Requested Firma object. If company is not found, it will return null.
      */
-    public Firma findCompanyInDatabase(String companyIco);
+    public FirmaService findCompanyInDatabase(String companyIco);
 
 
     /**
@@ -47,7 +45,7 @@ public interface DataService {
      *
      * @return List<Firma> of all companies in database. If no company is present in database, null will be returned.
      */
-    public List<Firma> showCompaniesInDatabase();
+    public List<FirmaService> showCompaniesInDatabase();
 
     /**
      * This method delete company from database.

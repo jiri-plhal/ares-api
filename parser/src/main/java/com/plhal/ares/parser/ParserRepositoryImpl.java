@@ -126,7 +126,6 @@ public class ParserRepositoryImpl implements ParserRepository {
 
                 // Přidávám člena statutárního orgánu do firmy
                 listStatutarniOrgan.add(tempSO);
-
             } else {
                 log.warn("Company doesnt have any statutory authority");
             }

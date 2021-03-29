@@ -32,7 +32,7 @@ public class Firma {
     @NonNull
     private String sidlo;
 
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     @JoinTable(name="firma_predmet_podnikani",
             schema = "ares",
             joinColumns = @JoinColumn(name="ico"),

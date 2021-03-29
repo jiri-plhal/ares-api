@@ -1,4 +1,4 @@
-package com.plhal.ares.webapp;
+package com.plhal.ares.webapi;
 
 import com.plhal.ares.parser.ParserRepositoryProperties;
 import lombok.AllArgsConstructor;

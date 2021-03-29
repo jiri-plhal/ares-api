@@ -22,19 +22,19 @@
     <br>
     <h3>Vyhledávání firem</h3>
     <br> Název firmy:
-    <p class="font-weight-bold" th:text="${firma.nazevFirmy}"/>
+    <p class="font-weight-bold" th:text="${firmaService.nazevFirmy}"/>
 
     <br> Právní forma:
-    <p class="font-weight-bold" th:text="${firma.pravniForma}"/>
+    <p class="font-weight-bold" th:text="${firmaService.pravniForma}"/>
 
     <br> Základní kapitál:
-    <p class="font-weight-bold" th:text="${firma.zakladniKapital}"/>
+    <p class="font-weight-bold" th:text="${firmaService.zakladniKapital}"/>
 
     <br> Sídlo firmy:
-    <p class="font-weight-bold" th:text="${firma.sidlo}"/>
+    <p class="font-weight-bold" th:text="${firmaService.sidlo}"/>
 
     <br> Předmět podnikání:
-    <li class="font-weight-bold" th:each="predmetPodnikani: ${firma.predmetPodnikani}"
+    <li class="font-weight-bold" th:each="predmetPodnikani: ${firmaService.predmetPodnikaniService}"
         th:text="${predmetPodnikani.nazev}"></li>
     <br> Statutární orgány: <br> <br>
 
@@ -49,7 +49,7 @@
         </thead>
 
         <tbody>
-        <tr th:each="temp : ${firma.clenoveStatutarnihoOrganu}">
+        <tr th:each="temp : ${firmaService.clenoveStatutarnihoOrganuService}">
             <td th:text="${temp.funkce}"/>
             <td th:text="${temp.prijmeni}"/>
             <td th:text="${temp.jmeno}"/>
@@ -57,17 +57,17 @@
         </tbody>
     </table>
     <br>
-    <form action="#" th:action="@{/firmapridana}"  method="POST" th:object="${firma}">
+    <form action="#" th:action="@{/firmapridana}"  method="POST" th:object="${firmaService}">
         <input type="hidden" th:field="*{nazevFirmy}">
         <input type="hidden" th:field="*{ico}">
         <input type="hidden" th:field="*{pravniForma}">
         <input type="hidden" th:field="*{zakladniKapital}">
         <input type="hidden" th:field="*{sidlo}">
-        <input type="hidden" th:each="row,rowStat : *{predmetPodnikani}" th:field="*{predmetPodnikani[__${rowStat.index}__].nazev}" />
-        <input type="hidden" th:each="row,rowStat : *{clenoveStatutarnihoOrganu}" th:field="*{clenoveStatutarnihoOrganu[__${rowStat.index}__].funkce}" />
-        <input type="hidden" th:each="row,rowStat : *{clenoveStatutarnihoOrganu}" th:field="*{clenoveStatutarnihoOrganu[__${rowStat.index}__].firma.ico}" />
-        <input type="hidden" th:each="row,rowStat : *{clenoveStatutarnihoOrganu}" th:field="*{clenoveStatutarnihoOrganu[__${rowStat.index}__].jmeno}" />
-        <input type="hidden" th:each="row,rowStat : *{clenoveStatutarnihoOrganu}" th:field="*{clenoveStatutarnihoOrganu[__${rowStat.index}__].prijmeni}" />
+        <input type="hidden" th:each="row,rowStat : *{predmetPodnikaniService}" th:field="*{predmetPodnikaniService[__${rowStat.index}__].nazev}" />
+        <input type="hidden" th:each="row,rowStat : *{clenoveStatutarnihoOrganuService}" th:field="*{clenoveStatutarnihoOrganuService[__${rowStat.index}__].funkce}" />
+        <input type="hidden" th:each="row,rowStat : *{clenoveStatutarnihoOrganuService}" th:field="*{clenoveStatutarnihoOrganuService[__${rowStat.index}__].firmaService.ico}" />
+        <input type="hidden" th:each="row,rowStat : *{clenoveStatutarnihoOrganuService}" th:field="*{clenoveStatutarnihoOrganuService[__${rowStat.index}__].jmeno}" />
+        <input type="hidden" th:each="row,rowStat : *{clenoveStatutarnihoOrganuService}" th:field="*{clenoveStatutarnihoOrganuService[__${rowStat.index}__].prijmeni}" />
 
         <button type="submit" class="btn btn-info btn-sm ">Přidej firmu</button>
     </form>

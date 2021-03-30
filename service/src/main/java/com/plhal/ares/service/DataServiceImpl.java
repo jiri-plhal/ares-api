@@ -34,11 +34,7 @@ public class DataServiceImpl implements DataService {
 
         Firma firma = parserRepository.najdiFirmu(ico);
 
-        if (firma == null) {
-            return null;
-        } else {
-            return FirmaConvertor.fromDbmodelToService(firma);
-        }
+        return FirmaConvertor.fromDbmodelToService(firma);
     }
 
     /**
@@ -77,7 +73,6 @@ public class DataServiceImpl implements DataService {
      */
     public FirmaService findCompanyInDatabase(@NonNull String companyIco) {
         log.info("Searching company with ICO {} in database", companyIco);
-
         return FirmaConvertor.fromDbmodelToService(firmaRepository.findById(companyIco).get());
     }
 

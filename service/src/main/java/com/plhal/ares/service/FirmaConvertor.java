@@ -3,7 +3,6 @@ package com.plhal.ares.service;
 import com.plhal.ares.dblayer.Firma;
 import com.plhal.ares.dblayer.PredmetPodnikani;
 import com.plhal.ares.dblayer.StatutarniOrgan;
-import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
@@ -21,8 +20,7 @@ public class FirmaConvertor {
      * @param company Firma object, which we want to convert into FirmaService object
      * @return Object of FirmaService corresponding to Firma class.
      */
-    public static FirmaService fromDbmodelToService(@NonNull Firma company) {
-
+    public static FirmaService fromDbmodelToService(Firma company) {
         log.info("Start converting company {} from database model to service model", company.getIco());
         List<PredmetPodnikaniService> predmetPodnikaniServiceList = new ArrayList<>();
         List<StatutarniOrganService> statutarniOrganServiceList = new ArrayList<>();
@@ -61,8 +59,7 @@ public class FirmaConvertor {
      * @param firmaService FirmaService object, which we want to convert into Service object
      * @return Object of Firma corresponding to FirmaService class.
      */
-    public static Firma fromServiceToDbmodel(@NonNull FirmaService firmaService) {
-
+    public static Firma fromServiceToDbmodel(FirmaService firmaService) {
         log.info("Start converting company {} from service model to database model", firmaService.getIco());
         List<PredmetPodnikani> predmetPodnikaniList = new ArrayList<>();
         List<StatutarniOrgan> statutarniOrganList = new ArrayList<>();
